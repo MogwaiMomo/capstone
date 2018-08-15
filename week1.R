@@ -6,6 +6,7 @@ setwd(dirname(parent.frame(2)$ofile))
 # load libraries
 library(tm)
 library(dplyr)
+library(RCurl)
 
 # download dataset from URL
 url <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
@@ -125,43 +126,44 @@ blog <- Corpus(DataframeSource(blog.sample))
 news <- Corpus(DataframeSource(news.sample))
 twitter <- Corpus(DataframeSource(twitter.sample))
 
-# Create a profanity filter using the english and international files here: https://github.com/xavier/expletive/tree/master/data
-# prof_stopwords <- read.csv("profanity_eng.txt", stringsAsFactors=F)
-# prof_stopwords <- as.character(prof_stopwords[,1])
+# Create a profanity filter using the english and international files here: 
+
+# get profanity lists
+# url
+prof_url <- "https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt"
+
+# get text from urls
+prof_file <- getURL("https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt", ssl.verifyhost=FALSE, ssl.verifypeer=FALSE)
+
+prof_stopwords <- unlist(strsplit(prof_file, "\n"))
 
 # Create full stopwords list, including profanity terms
-# custom_stopwords <- c(stopwords("english"), prof_stopwords)
+custom_stopwords <- c(stopwords("english"), prof_stopwords)
 
 # Write function that cleans and tokenizes lines of text 
-# cleanString <- function(corpus) {
-#   
-# # lowercase
-#   corpus <- tm_map(corpus, content_transformer(tolower))
-#   
-# # remove punctuation
-#   corpus <- tm_map(corpus, FUN = removePunctuation)
-# 
-# # remove numbers
-#   corpus <- tm_map(corpus, FUN = removeNumbers)
-# 
-# # remove stopwords
-#   #corpus <- tm_map(corpus, removeWords, custom_stopwords)
-#   
-# # strip whitespace 
-#   corpus <- tm_map(corpus, FUN = stripWhitespace)
-# 
-#   return(corpus)
-# }
+cleanString <- function(corpus) {
+# lowercase
+  corpus <- tm_map(corpus, content_transformer(tolower))
+# remove punctuation
+  corpus <- tm_map(corpus, FUN = removePunctuation)
+# remove numbers
+  corpus <- tm_map(corpus, FUN = removeNumbers)
+# remove stopwords
+  corpus <- tm_map(corpus, removeWords, custom_stopwords)
+# strip whitespace
+  corpus <- tm_map(corpus, FUN = stripWhitespace)
+  return(corpus)
+}
 
 # clean each sample corpus
-# cl_blog <- cleanString(blog)
-# cl_twitter <- cleanString(twitter)
-# cl_news <- cleanString(news)
+cl_blog <- cleanString(blog)
+cl_twitter <- cleanString(twitter)
+cl_news <- cleanString(news)
 
 # create TDM
-#blog_tdm <- DocumentTermMatrix(cl_blog)
-#twitter_tdm <- DocumentTermMatrix(cl_twitter)
-#news_tdm <- DocumentTermMatrix(cl_news)
+blog_dtm <- DocumentTermMatrix(cl_blog)
+twitter_dtm <- DocumentTermMatrix(cl_twitter)
+news_dtm <- DocumentTermMatrix(cl_news)
 
 
 ## QUIZ 1 ##
