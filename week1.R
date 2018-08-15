@@ -77,10 +77,33 @@ twitter.time <- proc.time() - ptm3
 
 #### METHOD 2: GET FULL DATA #####
 getFullData <- function(x) {
-  # read all data
-  sample <- readLines(x)
-  # convert to data frame
-  sample.df <- data.frame(source = x, line = sample)
+  
+  # get the number of lines in file
+  com <- paste0("wc -l ", file, " | awk '{ print $1 }'")
+  n <- as.numeric(system(command=com, intern=TRUE))
+  
+  # open file connection
+  con <- file(file, open="r")
+  
+  # create df for storing lines from file
+  full.df <- data.frame(
+    index = numeric(),
+    line = character()
+  )
+  
+  # loop over a file connection
+  for (i in 1:n) {
+      line <- readLines(con, 1, warn = FALSE)
+      row <- data.frame(
+        index = i,
+        line = line
+      )
+      full.df  <- rbind(full.df, row)
+    }
+  
+  #close connection
+  close(con)
+  return(full.df) 
 }
 
 # Start the clock
