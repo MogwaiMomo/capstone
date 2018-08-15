@@ -1,3 +1,6 @@
+# Global options
+options(stringsAsFactors = FALSE)
+
 setwd(dirname(parent.frame(2)$ofile))
 
 # load libraries
@@ -29,8 +32,10 @@ getSample <- function(file) {
   
   # create df for storing lines from file
   sample.df <- data.frame(
-    index = numeric(),
-    line = character()
+    doc_id = character(),
+    text = character(),
+    line = numeric()
+    
   )
   
   # loop over a file connection
@@ -42,36 +47,36 @@ getSample <- function(file) {
       print(paste("Processing line ", i, " of ", n, "..."))
       line <- readLines(con, 1, warn = FALSE)
       row <- data.frame(
-        index = i,
-        line = line
+        doc_id = NA,
+        text = line,
+        line = i
       )
       sample.df  <- rbind(sample.df, row)
     }
   }
+  
+  ids <- seq(1, nrow(sample.df), 1)
+  sample.df$doc_id <- ids
   
   #close connection
   close(con)
   return(sample.df) 
 }
 
-# Start the clock
-ptm <- proc.time()
+# get data
 blog.sample <- getSample(files[[1]])
-# Stop the clock
-blog.time <- proc.time() - ptm
+# get time
+blog.time <- system.time(getSample(files[[1]]))
 
-# Start the clock
-ptm2 <- proc.time()
+# get data
 news.sample <- getSample(files[[2]])
-# Stop the clock
-news.time <- proc.time() - ptm2
+# get time
+news.time <- system.time(getSample(files[[2]]))
 
-# Start the clock
-ptm3 <- proc.time()
+# get data
 twitter.sample <- getSample(files[[3]])
-
-# Stop the clock
-twitter.time <- proc.time() - ptm3
+# get time
+twitter.time <- system.time(getSample(files[[3]]))
 
 
 
@@ -87,53 +92,38 @@ getFullData <- function(x) {
   
   # create df for storing lines from file
   full.df <- data.frame(
-    index = numeric(),
-    line = character()
+    doc_id = character(),
+    text = character(),
+    line = numeric()
   )
   
   # loop over a file connection
   for (i in 1:n) {
       line <- readLines(con, 1, warn = FALSE)
       row <- data.frame(
-        index = i,
-        line = line
+        doc_id = NA,
+        text = line,
+        line = i
       )
       full.df  <- rbind(full.df, row)
-    }
+  }
+  
+  ids <- seq(1, nrow(sample.df), 1)
+  sample.df$doc_id <- ids
   
   #close connection
   close(con)
   return(full.df) 
 }
 
-# Start the clock
-ptm <- proc.time()
-blog.full <- getFullData(files[[1]])
-# Stop the clock
-blog.time.full <- proc.time() - ptm
-
-# Start the clock
-ptm <- proc.time()
-news.full <- getFullData(files[[2]])
-# Stop the clock
-news.time.full  <- proc.time() - ptm
-
-# Start the clock
-ptm <- proc.time()
-twitter.full <- getFullData(files[[3]])
-# Stop the clock
-twitter.time.full  <- proc.time() - ptm
-
 #### END: GET FULL DATA #####
-
-
 
 
 # Write sample lists to corpora
 
-# blog <- VCorpus(VectorSource(blog.sample))
-# news <- VCorpus(VectorSource(news.sample))
-# twitter <- VCorpus(VectorSource(twitter.sample))
+blog <- Corpus(DataframeSource(blog.sample))
+news <- Corpus(DataframeSource(news.sample))
+twitter <- Corpus(DataframeSource(twitter.sample))
 
 # Create a profanity filter using the english and international files here: https://github.com/xavier/expletive/tree/master/data
 # prof_stopwords <- read.csv("profanity_eng.txt", stringsAsFactors=F)
