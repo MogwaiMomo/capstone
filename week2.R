@@ -147,7 +147,7 @@ q1.min <- mean.doc.length[which.min(mean.doc.length)]
 
 # blog histogram  
 p1 <- ggplot(data = blog.df, aes(char_count)) 
-p1 <- p1 + geom_histogram(binwidth = 50) + geom_vline(xintercept=mean(blog.df$char_count), color="red")
+p1 <- p1 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(blog.df$char_count), color="red")
 p1 <- p1 + ggtitle("blog document length: histogram")
 
 # blog qqplot
@@ -155,10 +155,9 @@ p2 <- ggplot(data = blog.df, aes(sample = char_count))
 p2 <- p2 + stat_qq() + stat_qq_line()
 p2 <- p2 + ggtitle("blog document length: qq-plot")
 
-
 # news histogram 
 p3 <- ggplot(data = news.df, aes(char_count)) 
-p3 <- p3 + geom_histogram(binwidth = 50) + geom_vline(xintercept=mean(news.df$char_count), color="red")
+p3 <- p3 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(news.df$char_count), color="red")
 p3 <- p3 + ggtitle("news document length: histogram")
 
 # news qqplot
@@ -168,7 +167,7 @@ p4 <- p4 + ggtitle("news document length: qq-plot")
 
 # twitter histogram  
 p5 <- ggplot(data = twitter.df, aes(char_count)) 
-p5 <- p5 + geom_histogram(binwidth = 50) + geom_vline(xintercept=mean(twitter.df$char_count), color="red")
+p5 <- p5 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(twitter.df$char_count), color="red")
 p5 <- p5 + ggtitle("twitter document length: histogram")
 
 # twitter qqplot
