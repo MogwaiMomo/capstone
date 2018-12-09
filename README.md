@@ -1,5 +1,11 @@
 # TO DO LIST - WEEK 2
 
+DO THIS FIRST: Exploratory analysis via tidytext approach (jump to Q6 of assignment): 
+
+https://www.tidytextmining.com/tidytext.html
+
+
+
 ## Tasks to accomplish
 
 ### PART 1: Exploratory analysis

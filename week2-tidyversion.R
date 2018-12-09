@@ -351,6 +351,9 @@ ggarrange(
 
 
 
+
+
+
 # Q7. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
 
 # Q8. How do you evaluate how many of the words come from foreign languages?
