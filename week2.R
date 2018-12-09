@@ -148,32 +148,38 @@ q1.min <- mean.doc.length[which.min(mean.doc.length)]
 # blog histogram  
 p1 <- ggplot(data = blog.df, aes(char_count)) 
 p1 <- p1 + geom_histogram(binwidth = 50) + geom_vline(xintercept=mean(blog.df$char_count), color="red")
+p1 <- p1 + ggtitle("blog document length: histogram")
 
 # blog qqplot
 p2 <- ggplot(data = blog.df, aes(sample = char_count))
 p2 <- p2 + stat_qq() + stat_qq_line()
+p2 <- p2 + ggtitle("blog document length: qq-plot")
+
 
 # news histogram 
 p3 <- ggplot(data = news.df, aes(char_count)) 
 p3 <- p3 + geom_histogram(binwidth = 50) + geom_vline(xintercept=mean(news.df$char_count), color="red")
+p3 <- p3 + ggtitle("news document length: histogram")
 
 # news qqplot
 p4 <- ggplot(data = news.df, aes(sample = char_count))
 p4 <- p4 + stat_qq() + stat_qq_line()
+p4 <- p4 + ggtitle("news document length: qq-plot")
 
 # twitter histogram  
 p5 <- ggplot(data = twitter.df, aes(char_count)) 
 p5 <- p5 + geom_histogram(binwidth = 50) + geom_vline(xintercept=mean(twitter.df$char_count), color="red")
+p5 <- p5 + ggtitle("twitter document length: histogram")
 
 # twitter qqplot
 p6 <- ggplot(data = twitter.df, aes(sample = char_count))
 p6 <- p6 + stat_qq() + stat_qq_line()
+p6 <- p6 + ggtitle("twitter document length: qq-plot")
 
 # show plots side by side
 grid.arrange(p1, p2, p3, p4, p5, p6, ncol=2)
 
 # Q3. Are the different sources *significantly* different in length? 
-
 
 blog.df <- blog.df %>%
   mutate(type = "blog")
@@ -345,10 +351,26 @@ ggarrange(
 
 # Q6. What are the frequencies of 2-grams and 3-grams in the dataset?
 
-
-
 # Q7. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
 
 # Q8. How do you evaluate how many of the words come from foreign languages?
 
 # Q9. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
+
+
+
+### MODELLING
+
+# Tasks to accomplish
+
+# Build basic n-gram model - using the exploratory analysis you performed, build a basic n-gram model for predicting the next word based on the previous 1, 2, or 3 words.
+# Build a model to handle unseen n-grams - in some cases people will want to type a combination of words that does not appear in the corpora. Build a model to handle cases where a particular n-gram isn't observed.
+# Questions to consider
+# 
+# How can you efficiently store an n-gram model (think Markov Chains)?
+# How can you use the knowledge about word frequencies to make your model smaller and more efficient?
+# How many parameters do you need (i.e. how big is n in your n-gram model)?
+# Can you think of simple ways to "smooth" the probabilities (think about giving all n-grams a non-zero probability even if they aren't observed in the data) ?
+# How do you evaluate whether your model is any good?
+# How can you use backoff models to estimate the probability of unobserved n-grams?
+
