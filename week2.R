@@ -4,8 +4,18 @@ setwd(dirname(parent.frame(2)$ofile))
 
 # load libraries
 library(tm)
-library(dplyr)
+# library(RWeka)
+# look into this: https://datascience.stackexchange.com/questions/18522/text-mining-in-r-without-rweka
 library(RCurl)
+library(tidyverse)
+#install dev version of ggplot2 to get stat_qq_line function
+devtools::install_github("tidyverse/ggplot2")
+library(ggplot2)
+library(gridExtra)
+library(SnowballC)
+library(wordcloud)
+library(RColorBrewer)
+library(ggpubr)
 
 # download dataset from URL
 url <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
@@ -19,6 +29,7 @@ file.remove(destfile)
 file_dir <- paste(getwd(),"input/final/en_US", sep="/")
 files <- list.files(file_dir, full.names = TRUE)
 
+
 # get the number of lines in file
 getTotalLines <- function(file) {
   com <- paste0("wc -l ", file, " | awk '{ print $1 }'")
@@ -30,6 +41,8 @@ getTotalLines <- function(file) {
 getData <- function(file) {
   # get the number of lines in file
   n <- getTotalLines(file)
+  # uncomment line 35 if you want only a small sample of lines
+  n <- n*0.001
   # open file connection
   con <- file(file, open="r")
   # read in all lines
@@ -37,34 +50,46 @@ getData <- function(file) {
   names(lines) <- c("text")
   #close connection
   close(con)
-  return(lines)
+  lines$doc_id = seq(1, nrow(lines), 1)
+  df <- lines %>%
+    mutate(char_count = nchar(text)) %>%
+    select(doc_id, text, char_count)
+  return(df)
 }
+
 
 # write sample lists to corpora
 createCorpus <- function(text.df) {
   # create doc_id column
-  text.df$doc_id <- seq(1, nrow(text.df), 1)
   corpus <- Corpus(DataframeSource(text.df))
   return(corpus)
 }
 
-# Create a profanity filter using the english and international files here:
-
-# get profanity lists
-prof_url <- "https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt"
-
-# get text from urls
-prof_file <- getURL("https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt", ssl.verifyhost=FALSE, ssl.verifypeer=FALSE)
-
-prof_stopwords <- unlist(strsplit(prof_file, "\n"))
-
-# Create full stopwords list, including profanity terms
-custom_stopwords <- c(stopwords("english"), prof_stopwords)
 
 # Write function that cleans and tokenizes lines of text
 cleanString <- function(corpus) {
+  # get profanity lists
+  prof_url <- "https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt"
+  # get text from urls
+  prof_file <- getURL(prof_url, ssl.verifyhost=FALSE, ssl.verifypeer=FALSE)
+  # create profane stopword character list
+  prof_stopwords <- unlist(strsplit(prof_file, "\n"))
+  
+  # Create full stopwords list, including profanity terms
+  custom_stopwords <- c(stopwords("english"), prof_stopwords)
   # lowercase
   corpus <- tm_map(corpus, content_transformer(tolower))
+  #create toSpace content transformer to deal with hyphen/colon issues
+  toSpace <- content_transformer(function(x, pattern) {return (gsub(pattern, " ", x))})
+  corpus <- tm_map(corpus, toSpace, "-")
+  corpus <- tm_map(corpus, toSpace, ":")
+  corpus <- tm_map(corpus, toSpace, "’")
+  corpus <- tm_map(corpus, toSpace, "‘")
+  corpus <- tm_map(corpus, toSpace, "“")
+  corpus <- tm_map(corpus, toSpace, "”")
+  #corpus <- tm_map(corpus, toSpace, "—")
+  #corpus <- tm_map(corpus, toSpace, " -")
+  
   # remove punctuation
   corpus <- tm_map(corpus, FUN = removePunctuation)
   # remove numbers
@@ -72,63 +97,258 @@ cleanString <- function(corpus) {
   # strip whitespace
   corpus <- tm_map(corpus, FUN = stripWhitespace)
   # remove stopwords
-  # corpus <- tm_map(corpus, removeWords, custom_stopwords)
+  corpus <- tm_map(corpus, removeWords, custom_stopwords)
   return(corpus)
+  # stem document
+  corpus <- tm_map(corpus, stemDocument)
 }
 
-# Get data
-blog <- getData(files[1])
-news <- getData(files[2])
-twitter <- getData(files[3])
 
-# Create corpuses
-blog_corp <- createCorpus(blog)
-news_corp <- createCorpus(news)
-twitter_corp <- createCorpus(twitter)
+# create line dfs with word counts
+blog.df <- getData(files[1])
+news.df <- getData(files[2])
+twitter.df <- getData(files[3])
 
-# clean each sample corpus (no stopword removal)
+# create corpuses
+blog.corp <- createCorpus(blog.df)
+news.corp <- createCorpus(news.df)
+twitter.corp <- createCorpus(twitter.df)
 
-clean_blog <- cleanString(blog_corp)
-# clean_news <- cleanString(news_corp)
-# clean_twitter <- cleanString(twitter_corp)
-
+# clean each sample corpus
+system.time(blog.corp <- cleanString(blog.corp))
+system.time(news.corp <- cleanString(news.corp))
+system.time(twitter.corp <- cleanString(twitter.corp))
 
 # create TDM
-# blog_dtm <- DocumentTermMatrix(clean_blog)
-# news_dtm <- DocumentTermMatrix(clean_news)
-# twitter_dtm <- DocumentTermMatrix(clean_twitter)
+blog.dtm <- DocumentTermMatrix(blog.corp)
+news.dtm <- DocumentTermMatrix(news.corp)
+twitter.dtm <- DocumentTermMatrix(twitter.corp)
 
-# Tasks to accomplish
+### EXPLORATORY DATA ANALYSIS
 
-# 1. Exploratory analysis - perform a thorough exploratory analysis of the data, understanding the distribution of words and relationship between the words in the corpora.
+## Document-type analysis
+
+# Q1. Which text source is, on average, the longest format? The shortest?
+
+blog.avg.char <- mean(blog.df$char_count)
+news.avg.char <- mean(news.df$char_count)
+twitter.avg.char <- mean(twitter.df$char_count)
+
+mean.doc.length <- list(
+  "blog" = blog.avg.char,
+  "news" = news.avg.char,
+  "twitter" = twitter.avg.char
+)
+
+q1.max <- mean.doc.length[which.max(mean.doc.length)]
+q1.min <- mean.doc.length[which.min(mean.doc.length)]
+
+# Q2. Are these document lengths normally distributed?
+
+# blog histogram  
+p1 <- ggplot(data = blog.df, aes(char_count)) 
+p1 <- p1 + geom_histogram(binwidth = 50) + geom_vline(xintercept=mean(blog.df$char_count), color="red")
+
+# blog qqplot
+p2 <- ggplot(data = blog.df, aes(sample = char_count))
+p2 <- p2 + stat_qq() + stat_qq_line()
+
+# news histogram 
+p3 <- ggplot(data = news.df, aes(char_count)) 
+p3 <- p3 + geom_histogram(binwidth = 50) + geom_vline(xintercept=mean(news.df$char_count), color="red")
+
+# news qqplot
+p4 <- ggplot(data = news.df, aes(sample = char_count))
+p4 <- p4 + stat_qq() + stat_qq_line()
+
+# twitter histogram  
+p5 <- ggplot(data = twitter.df, aes(char_count)) 
+p5 <- p5 + geom_histogram(binwidth = 50) + geom_vline(xintercept=mean(twitter.df$char_count), color="red")
+
+# twitter qqplot
+p6 <- ggplot(data = twitter.df, aes(sample = char_count))
+p6 <- p6 + stat_qq() + stat_qq_line()
+
+# show plots side by side
+grid.arrange(p1, p2, p3, p4, p5, p6, ncol=2)
+
+# Q3. Are the different sources *significantly* different in length? 
+
+
+blog.df <- blog.df %>%
+  mutate(type = "blog")
+
+news.df <- news.df %>%
+  mutate(type = "news")
+
+twitter.df <- twitter.df %>%
+  mutate(type = "twitter")
+
+KWdata <- rbind(blog.df, news.df, twitter.df)
+KWdata$type = as.factor(KWdata$type)
+
+# Visualize the 3 groups using a boxplot:
+
+p7 <- ggplot(data = KWdata, aes(type, char_count))
+p7 <- p7 + geom_boxplot() 
+p7
+
+# Run a test to be sure:
+kruskal.test(KWdata$char_count, KWdata$type)
+
+# Answer - yes, according to the KW test, they are significantly different in length.
+
+# Q4. Which text source has HIGHEST word diversity (most # of words)? What about the LOWEST? 
 
 # Get total number of unique terms in each corpus 
-# total.words <- list(
-#   "blog" = dim(blog_dtm)[[2]],
-#   "twitter" = dim(twitter_dtm)[[2]],
-#   "news" = dim(news_dtm)[[2]]
-# )
+total.words <- list(
+  "blog" = dim(blog.dtm)[[2]],
+  "twitter" = dim(twitter.dtm)[[2]],
+  "news" = dim(news.dtm)[[2]]
+)
 
-# Q1. Which text source has HIGHEST word diversity (most # of words)? What about the LOWEST? 
-# q1.max <- total.words[which.max(total.words)]
-# q1.max
-# 
-# q1.min <- total.words[which.min(total.words)]
-# q1.min
+q4.max <- total.words[which.max(total.words)]
+q4.max
 
-# Q2. Which text source is, on average, the longest format by word count? The shortest?
+q4.min <- total.words[which.min(total.words)]
+q4.min
 
 
+### Term Frequency Analysis  ###
+
+# Q5. Some words are more frequent than others - what are the distributions of word frequencies?
+
+# Create sorted dataframes (for word clouds)
+by_freq <- function(dtm) {
+  freq <- colSums(as.matrix(dtm))
+  desc <- sort(freq, decreasing = TRUE)
+  word.freq.df <- data.frame(
+    word = names(desc),
+    freq = desc
+  )
+  return(word.freq.df)
+}
+
+# Generate word cloud: Blog
+blog_freq <- by_freq(blog.dtm)
+png("output/blog_wordcloud.png", width=1280,height=800)
+wordcloud(
+  blog_freq$word, 
+  blog_freq$freq,
+  scale=c(8,.3),
+  min.freq = 1, 
+  max.words = 1000, 
+  random.order=FALSE, 
+  random.color = FALSE, 
+  rot.per=0.15, 
+  colors=brewer.pal(12, "Blues")
+  )
+dev.off()
 
 
-# What is the distribution of terms in each 
+# Generate word cloud: News
+news_freq <- by_freq(news.dtm)
+png("output/news_wordcloud.png", width=1280,height=800)
+wordcloud(
+  news_freq$word, 
+  news_freq$freq,
+  scale=c(8,.3),
+  min.freq = 1, 
+  max.words = 1000, 
+  random.order=FALSE, 
+  random.color = FALSE, 
+  rot.per=0.15, 
+  colors=brewer.pal(12, "Reds")
+)
+dev.off()
+
+# Generate word cloud: Twitter
+twitter_freq <- by_freq(twitter.dtm)
+png("output/twitter_wordcloud.png", width=1280,height=800)
+wordcloud(
+  twitter_freq$word, 
+  twitter_freq$freq,
+  scale=c(8,.3),
+  min.freq = 1, 
+  max.words = 1000, 
+  random.order=FALSE, 
+  random.color = FALSE, 
+  rot.per=0.15, 
+  colors=brewer.pal(12, "Greens")
+)
+dev.off()
+
+# Compare top 25 most frequent terms for each source
+
+top25terms_blog <- head(blog_freq, 25)
+top25terms_news <- head(news_freq, 25)
+top25terms_twitter <- head(twitter_freq, 25)
+
+# Create bar graphs
+
+# blog
+top25terms_blog_plot <- ggplot(top25terms_blog, aes(x = reorder(word, -freq), y = freq)) + 
+  geom_col(fill = "#3182bd") +
+  labs(x = "\nWord", y = "Count\n") +
+  ylim(0, 300) +
+  # add title
+  ggtitle("Top 25 Most Frequent Words in the Blog Corpus\n") +
+  # center it 
+  theme(plot.title = element_text(hjust = 0.5), 
+        plot.margin=unit(c(1,1,1.5,1.2),"cm")
+        ) + 
+  # add data labels
+  geom_text(aes(label=freq), position=position_dodge(width=0.9), vjust=-0.25)
+top25terms_blog_plot
 
 
-# 2. Understand frequencies of words and word pairs - build figures and tables to understand variation in the frequencies of words and word pairs in the data.
-# Questions to consider
-# 
-# Some words are more frequent than others - what are the distributions of word frequencies?
-# What are the frequencies of 2-grams and 3-grams in the dataset?
-# How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
-# How do you evaluate how many of the words come from foreign languages?
-# Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
+
+# news
+top25terms_news_plot <- ggplot(top25terms_news, aes(x = reorder(word, -freq), y = freq)) + 
+  geom_col(fill = "#de2d26") +
+  labs(x = "\nWord", y = "Count\n") +
+  ylim(0, 300) +
+  # add title
+  ggtitle("Top 25 Most Frequent Words in the News Corpus\n") +
+  # center it 
+  theme(
+    plot.title = element_text(hjust = 0.5), 
+    plot.margin=unit(c(1,1,1.5,1.2),"cm")
+    ) + 
+  # add data labels
+  geom_text(aes(label=freq), position=position_dodge(width=0.9), vjust=-0.25)
+top25terms_news_plot
+
+
+# twitter
+top25terms_twitter_plot <- ggplot(top25terms_twitter, aes(x = reorder(word, -freq), y = freq)) + 
+  geom_col(fill = "#31a354") +
+  labs(x = "\nWord", y = "Count\n") +
+  ylim(0, 300) +
+  # add title
+  ggtitle("Top 25 Most Frequent Words in the Twitter Corpus\n") +
+  # center it 
+  theme(plot.title = element_text(hjust = 0.5), 
+        plot.margin=unit(c(1,1,1.5,1.2),"cm")
+        ) + 
+  # add data labels
+  geom_text(aes(label=freq), position=position_dodge(width=0.9), vjust=-0.25)
+top25terms_twitter_plot
+
+ggarrange(
+  top25terms_blog_plot,
+  top25terms_news_plot,
+  top25terms_twitter_plot, 
+  ncol = 1, 
+  nrow = 3
+)
+
+# Q6. What are the frequencies of 2-grams and 3-grams in the dataset?
+
+
+
+# Q7. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
+
+# Q8. How do you evaluate how many of the words come from foreign languages?
+
+# Q9. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
