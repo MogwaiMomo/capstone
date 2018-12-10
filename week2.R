@@ -59,13 +59,24 @@ getData <- function(file) {
 
 # create line dfs with word counts
 blog.df <- getData(files[1])
-# news.df <- getData(files[2])
-# twitter.df <- getData(files[3])
+news.df <- getData(files[2])
+twitter.df <- getData(files[3])
 
 
-# create tidy tokenized df
+# create tidy tokenized df (filter out numbers)
 tidy.blog <- blog.df %>%
-  unnest_tokens(word, text)
+  unnest_tokens(word, text) %>%
+  filter(!grepl("[0-9]+", word))
+  
+tidy.news <- news.df %>%
+  unnest_tokens(word, text) %>%
+  filter(!grepl("[0-9]+", word))
+
+tidy.twitter <- twitter.df %>%
+  unnest_tokens(word, text) %>%
+  filter(!grepl("[0-9]+", word))
+
+# strip numeric tokens
 
 # strip stopwords and profanities
 
@@ -86,8 +97,174 @@ custom_stopwords <- rbind(stop_words, custom_stopwords)
 # strip stopwords & profanities
 tidy.blog <- tidy.blog %>%
   anti_join(custom_stopwords)
+tidy.news <- tidy.news %>%
+  anti_join(custom_stopwords)
+tidy.twitter <- tidy.twitter %>%
+  anti_join(custom_stopwords)
 
 ### EXPLORATORY DATA ANALYSIS: TIDY N-GRAM ANALYSIS
+### EXPLORATORY DATA ANALYSIS
+
+## Document-type analysis
+
+# Q1. Which text source is, on average, the longest format? The shortest?
+
+blog.docs <- blog.df %>%
+  mutate(char_count = nchar(text)) %>%
+  select(line, text, char_count)
+blog.avg.char <- mean(blog.docs$char_count)
+
+news.docs <- news.df %>%
+  mutate(char_count = nchar(text)) %>%
+  select(line, text, char_count)
+news.avg.char <- mean(news.docs$char_count)
+
+twitter.docs <- twitter.df %>%
+  mutate(char_count = nchar(text)) %>%
+  select(line, text, char_count)
+twitter.avg.char <- mean(twitter.docs$char_count)
+
+mean.doc.length <- list(
+  "blog" = blog.avg.char,
+  "news" = news.avg.char,
+  "twitter" = twitter.avg.char
+)
+
+q1.max <- mean.doc.length[which.max(mean.doc.length)]
+q1.min <- mean.doc.length[which.min(mean.doc.length)]
+
+# Q2. Are these document lengths normally distributed?
+
+# blog histogram  
+p1 <- ggplot(data = blog.df, aes(char_count)) 
+p1 <- p1 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(blog.df$char_count), color="red")
+p1 <- p1 + ggtitle("blog document length: histogram") + xlab("char. length") + ylab("# docs")
+
+# blog qqplot
+p2 <- ggplot(data = blog.df, aes(sample = char_count))
+p2 <- p2 + stat_qq() + stat_qq_line()
+p2 <- p2 + ggtitle("blog document length: qq-plot")
+
+# news histogram 
+p3 <- ggplot(data = news.df, aes(char_count)) 
+p3 <- p3 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(news.df$char_count), color="red")
+p3 <- p3 + ggtitle("news document length: histogram") + xlab("char. length") + ylab("# docs")
+
+# news qqplot
+p4 <- ggplot(data = news.df, aes(sample = char_count))
+p4 <- p4 + stat_qq() + stat_qq_line()
+p4 <- p4 + ggtitle("news document length: qq-plot") 
+
+# twitter histogram  
+p5 <- ggplot(data = twitter.df, aes(char_count)) 
+p5 <- p5 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(twitter.df$char_count), color="red")
+p5 <- p5 + ggtitle("twitter document length: histogram") + xlab("char. length") + ylab("# docs")
+
+# twitter qqplot
+p6 <- ggplot(data = twitter.df, aes(sample = char_count))
+p6 <- p6 + stat_qq() + stat_qq_line()
+p6 <- p6 + ggtitle("twitter document length: qq-plot")
+
+# show plots side by side
+grid.arrange(p1, p2, p3, p4, p5, p6, ncol=2)
+
+# Q3. Are the different sources *significantly* different in length? 
+
+blog.df <- blog.df %>%
+  mutate(type = "blog")
+
+news.df <- news.df %>%
+  mutate(type = "news")
+
+twitter.df <- twitter.df %>%
+  mutate(type = "twitter")
+
+KWdata <- rbind(blog.df, news.df, twitter.df)
+KWdata$type = as.factor(KWdata$type)
+
+# Visualize the 3 groups using a boxplot:
+
+p7 <- ggplot(data = KWdata, aes(type, char_count))
+p7 <- p7 + geom_boxplot() 
+p7
+
+# Run a test to be sure:
+kruskal.test(KWdata$char_count, KWdata$type)
+
+# Answer: Yes, according to the KW test, they are significantly different in length.
+
+# Q4. Which text source has HIGHEST word diversity (most # of words)? What about the LOWEST? 
+
+# Get total number of unique terms in each corpus 
+total.words <- list(
+  "blog" = dim(blog.dtm)[[2]],
+  "twitter" = dim(twitter.dtm)[[2]],
+  "news" = dim(news.dtm)[[2]]
+)
+
+q4.max <- total.words[which.max(total.words)]
+q4.max
+
+q4.min <- total.words[which.min(total.words)]
+q4.min
+
+# Q5. Some words are more frequent than others - what are the distributions of word frequencies?
+
+blog.freq <- tidy.blog %>%
+  count(word, sort = TRUE)
+
+news.freq <- tidy.news %>%
+  count(word, sort = TRUE)
+
+twitter.freq <- tidy.twitter %>%
+  count(word, sort = TRUE)
+
+
+# Generate word cloud: Blog
+png("output/blog_wordcloud.png", width=1280,height=800)
+wordcloud(
+  blog.freq$word, 
+  blog.freq$n,
+  scale=c(8,.3),
+  min.freq = 1, 
+  max.words = 1000, 
+  random.order=FALSE, 
+  random.color = FALSE, 
+  rot.per=0.15, 
+  colors=brewer.pal(12, "Blues")
+)
+dev.off()
+
+
+# Generate word cloud: News
+png("output/news_wordcloud.png", width=1280,height=800)
+wordcloud(
+  news.freq$word, 
+  news.freq$n,
+  scale=c(8,.3),
+  min.freq = 1, 
+  max.words = 1000, 
+  random.order=FALSE, 
+  random.color = FALSE, 
+  rot.per=0.15, 
+  colors=brewer.pal(12, "Reds")
+)
+dev.off()
+
+# Generate word cloud: Twitter
+png("output/twitter_wordcloud.png", width=1280,height=800)
+wordcloud(
+  twitter.freq$word, 
+  twitter.freq$n,
+  scale=c(8,.3),
+  min.freq = 1, 
+  max.words = 1000, 
+  random.order=FALSE, 
+  random.color = FALSE, 
+  rot.per=0.15, 
+  colors=brewer.pal(12, "Greens")
+)
+dev.off()
 
 
 # Q6. What are the frequencies of 2-grams and 3-grams in the dataset?
