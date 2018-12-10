@@ -76,13 +76,11 @@ tidy.twitter <- twitter.df %>%
   unnest_tokens(word, text) %>%
   filter(!grepl("[0-9]+", word))
 
-# strip numeric tokens
 
 # strip stopwords and profanities
 
-# get profanity list
 prof_url <- "https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt"
-# get text from urls
+# get text from url
 prof_file <- getURL(prof_url, ssl.verifyhost=FALSE, ssl.verifypeer=FALSE)
 # create profanity stopword character list
 prof_stopwords <- unlist(strsplit(prof_file, "\n"))
@@ -102,7 +100,6 @@ tidy.news <- tidy.news %>%
 tidy.twitter <- tidy.twitter %>%
   anti_join(custom_stopwords)
 
-### EXPLORATORY DATA ANALYSIS: TIDY N-GRAM ANALYSIS
 ### EXPLORATORY DATA ANALYSIS
 
 ## Document-type analysis
@@ -265,6 +262,23 @@ wordcloud(
   colors=brewer.pal(12, "Greens")
 )
 dev.off()
+
+# which words are common to all 3 sources?
+
+common_blog_news <- inner_join(blog.freq, news.freq, by = "word")
+common_news_twitter <- inner_join(news.freq, twitter.freq, by = "word")
+common_twitter_blog <- inner_join(twitter.freq, blog.freq, by = "word")
+common_full <- inner_join(common_blog_news, common_news_twitter, by = "word")
+
+all.freq <- bind_rows(mutate(tidy.blog, source = "blog"),
+                      mutate(tidy.news, source = "news"),
+                      mutate(tidy.twitter, source = "twitter")) %>%
+  count(source, word) %>%
+  group_by(source) %>%
+  mutate(proportion = n / sum(n)) %>%
+  select(-n) %>%
+  spread(source, proportion) # spread groups across cols
+  
 
 
 # Q6. What are the frequencies of 2-grams and 3-grams in the dataset?
