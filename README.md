@@ -1,5 +1,7 @@
 # TO DO LIST - WEEK 2
 
+# 2018-12-10:
+
 Continue with tidy-based analysis from: 
 
 https://www.tidytextmining.com/tidytext.html#the-gutenbergr-package
