@@ -6,6 +6,7 @@ setwd(dirname(parent.frame(2)$ofile))
 library(tm)
 library(RCurl)
 library(tidyverse)
+library(tidytext)
 #install dev version of ggplot2 to get stat_qq_line function
 devtools::install_github("tidyverse/ggplot2")
 library(ggplot2)
@@ -49,16 +50,10 @@ getData <- function(file) {
   names(lines) <- c("text")
   #close connection
   close(con)
-  lines$doc_id = seq(1, nrow(lines), 1)
-  df <- lines %>%
-    mutate(char_count = nchar(text)) %>%
-    select(doc_id, text, char_count)
-  return(df)
+  lines$line = seq(1, nrow(lines), 1)
+  lines <- lines %>% select(line, text)
+  return(lines)
 }
-
-
-
-
 
 
 
@@ -68,7 +63,29 @@ blog.df <- getData(files[1])
 # twitter.df <- getData(files[3])
 
 
+# create tidy tokenized df
+tidy.blog <- blog.df %>%
+  unnest_tokens(word, text)
 
+# strip stopwords and profanities
+
+# get profanity list
+prof_url <- "https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt"
+# get text from urls
+prof_file <- getURL(prof_url, ssl.verifyhost=FALSE, ssl.verifypeer=FALSE)
+# create profanity stopword character list
+prof_stopwords <- unlist(strsplit(prof_file, "\n"))
+# Create full stopwords list, including profanity terms
+custom_stopwords <- data_frame(
+  word = c(stopwords("english"), prof_stopwords),
+  lexicon = "custom"
+)
+data(stop_words)
+custom_stopwords <- rbind(stop_words, custom_stopwords)
+
+# strip stopwords & profanities
+tidy.blog <- tidy.blog %>%
+  anti_join(custom_stopwords)
 
 ### EXPLORATORY DATA ANALYSIS: TIDY N-GRAM ANALYSIS
 
