@@ -1,8 +1,8 @@
 # TO DO LIST - WEEK 2
 
-DO THIS FIRST: Exploratory analysis via tidytext approach (jump to Q6 of assignment): 
+Continue with tidy-based analysis from: 
 
-https://www.tidytextmining.com/tidytext.html
+https://www.tidytextmining.com/tidytext.html#the-gutenbergr-package
 
 
 
@@ -15,8 +15,10 @@ https://www.tidytextmining.com/tidytext.html
 
 #### Questions to consider
 
-1. Some words are more frequent than others - what are the distributions of word frequencies?
+1. DONE - Some words are more frequent than others - what are the distributions of word frequencies?
+
 2. What are the frequencies of 2-grams and 3-grams in the dataset?
+
 3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
 4. How do you evaluate how many of the words come from foreign languages?
 5. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?

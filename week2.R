@@ -136,32 +136,32 @@ q1.min <- mean.doc.length[which.min(mean.doc.length)]
 # Q2. Are these document lengths normally distributed?
 
 # blog histogram  
-p1 <- ggplot(data = blog.df, aes(char_count)) 
-p1 <- p1 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(blog.df$char_count), color="red")
+p1 <- ggplot(data = blog.docs, aes(char_count)) 
+p1 <- p1 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(blog.docs$char_count), color="red")
 p1 <- p1 + ggtitle("blog document length: histogram") + xlab("char. length") + ylab("# docs")
 
 # blog qqplot
-p2 <- ggplot(data = blog.df, aes(sample = char_count))
+p2 <- ggplot(data = blog.docs, aes(sample = char_count))
 p2 <- p2 + stat_qq() + stat_qq_line()
 p2 <- p2 + ggtitle("blog document length: qq-plot")
 
 # news histogram 
-p3 <- ggplot(data = news.df, aes(char_count)) 
-p3 <- p3 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(news.df$char_count), color="red")
+p3 <- ggplot(data = news.docs, aes(char_count)) 
+p3 <- p3 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(news.docs$char_count), color="red")
 p3 <- p3 + ggtitle("news document length: histogram") + xlab("char. length") + ylab("# docs")
 
 # news qqplot
-p4 <- ggplot(data = news.df, aes(sample = char_count))
+p4 <- ggplot(data = news.docs, aes(sample = char_count))
 p4 <- p4 + stat_qq() + stat_qq_line()
 p4 <- p4 + ggtitle("news document length: qq-plot") 
 
 # twitter histogram  
-p5 <- ggplot(data = twitter.df, aes(char_count)) 
-p5 <- p5 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(twitter.df$char_count), color="red")
+p5 <- ggplot(data = twitter.docs, aes(char_count)) 
+p5 <- p5 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(twitter.docs$char_count), color="red")
 p5 <- p5 + ggtitle("twitter document length: histogram") + xlab("char. length") + ylab("# docs")
 
 # twitter qqplot
-p6 <- ggplot(data = twitter.df, aes(sample = char_count))
+p6 <- ggplot(data = twitter.docs, aes(sample = char_count))
 p6 <- p6 + stat_qq() + stat_qq_line()
 p6 <- p6 + ggtitle("twitter document length: qq-plot")
 
@@ -170,16 +170,16 @@ grid.arrange(p1, p2, p3, p4, p5, p6, ncol=2)
 
 # Q3. Are the different sources *significantly* different in length? 
 
-blog.df <- blog.df %>%
+blog.docs <- blog.docs %>%
   mutate(type = "blog")
 
-news.df <- news.df %>%
+news.docs <- news.docs %>%
   mutate(type = "news")
 
-twitter.df <- twitter.df %>%
+twitter.docs <- twitter.docs %>%
   mutate(type = "twitter")
 
-KWdata <- rbind(blog.df, news.df, twitter.df)
+KWdata <- rbind(blog.docs, news.docs, twitter.docs)
 KWdata$type = as.factor(KWdata$type)
 
 # Visualize the 3 groups using a boxplot:
@@ -197,9 +197,9 @@ kruskal.test(KWdata$char_count, KWdata$type)
 
 # Get total number of unique terms in each corpus 
 total.words <- list(
-  "blog" = dim(blog.dtm)[[2]],
-  "twitter" = dim(twitter.dtm)[[2]],
-  "news" = dim(news.dtm)[[2]]
+  "blog" = nrow(blog.freq),
+  "twitter" = nrow(twitter.freq),
+  "news" = nrow(news.freq)
 )
 
 q4.max <- total.words[which.max(total.words)]
