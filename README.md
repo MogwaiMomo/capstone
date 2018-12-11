@@ -2,8 +2,10 @@
 
 # 2018-12-11:
 
-https://www.tidytextmining.com/tidytext.html#the-gutenbergr-package
+NEXT: filter bigram and trigram list: 
+https://www.tidytextmining.com/ngrams.html
 
+# Lesson: when doing exploratory analysis, visualize first, then run statistical test.
 
 
 ## Tasks to accomplish

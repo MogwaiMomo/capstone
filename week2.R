@@ -280,7 +280,7 @@ all.freq <- bind_rows(mutate(tidy.blog, source = "blog"),
   spread(source, proportion) %>% # spread groups across columns
   gather(source, proportion, "news":"twitter")
 
-# Visualization word frequency similarity between sources
+# Visualization of word frequency similarity between sources
 library(scales)
 
 p8 <- ggplot(all.freq, aes(x = proportion, y = blog, color = blog- proportion)) +
@@ -295,10 +295,51 @@ p8 <- ggplot(all.freq, aes(x = proportion, y = blog, color = blog- proportion)) 
   labs(y = "blog", x = NULL)
 p8 
 
+# Statistical test of word frequency similarity between sources
+
+# blog vs news
+
+cor.test(data = filter(all.freq, all.freq$source == "news"), ~ proportion + blog)
+
+# Answer: significant level of correlation, about 50% similar
+
+# similarity between blog & twitter
+
+cor.test(data = filter(all.freq, all.freq$source == "twitter"), ~ proportion + blog)
+
+# Answer: significant level of correlation, about 60% similar
 
 # Q6. What are the frequencies of 2-grams and 3-grams in the dataset?
 
+# Tokenize by 2-grams
 
+bigrams.blog <- blog.df %>%
+  unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
+  count(bigram, sort = TRUE)
+  
+
+bigrams.news <- news.df %>%
+  unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
+  count(bigram, sort = TRUE)
+
+bigrams.twitter <- twitter.df %>%
+  unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
+  count(bigram, sort = TRUE)
+
+
+# Tokenize by 3-grams
+
+trigrams.blog <- blog.df %>%
+  unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
+  count(trigram, sort = TRUE)
+
+trigrams.news <- news.df %>%
+  unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
+  count(trigram, sort = TRUE)
+
+trigrams.twitter <- twitter.df %>%
+  unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
+  count(trigram, sort = TRUE)
 
 # Q7. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
 
