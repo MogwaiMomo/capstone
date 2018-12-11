@@ -1,6 +1,6 @@
 # TO DO LIST - WEEK 2
 
-# 2018-12-10:
+# 2018-12-11:
 
 https://www.tidytextmining.com/tidytext.html#the-gutenbergr-package
 
