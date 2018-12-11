@@ -193,6 +193,16 @@ kruskal.test(KWdata$char_count, KWdata$type)
 # Q4. Which text source has HIGHEST word diversity (most # of words)? What about the LOWEST? 
 
 # Get total number of unique terms in each corpus 
+
+blog.freq <- tidy.blog %>%
+  count(word, sort = TRUE)
+
+news.freq <- tidy.news %>%
+  count(word, sort = TRUE)
+
+twitter.freq <- tidy.twitter %>%
+  count(word, sort = TRUE)
+
 total.words <- list(
   "blog" = nrow(blog.freq),
   "twitter" = nrow(twitter.freq),
@@ -206,16 +216,6 @@ q4.min <- total.words[which.min(total.words)]
 q4.min
 
 # Q5. Some words are more frequent than others - what are the distributions of word frequencies?
-
-blog.freq <- tidy.blog %>%
-  count(word, sort = TRUE)
-
-news.freq <- tidy.news %>%
-  count(word, sort = TRUE)
-
-twitter.freq <- tidy.twitter %>%
-  count(word, sort = TRUE)
-
 
 # Generate word cloud: Blog
 png("output/blog_wordcloud.png", width=1280,height=800)
@@ -280,20 +280,20 @@ all.freq <- bind_rows(mutate(tidy.blog, source = "blog"),
   spread(source, proportion) %>% # spread groups across columns
   gather(source, proportion, "blog":"twitter")
 
-# Create a visualization
+# Visualization word frequency similarity between sources
 library(scales)
 
-ggplot(all.freq, aes(x = proportion, y = "blog")) +
+p8 <- ggplot(all.freq, aes(x = proportion, y = blog, color = blog- proportion)) +
   geom_abline(color = "gray40", lty = 2) +
   geom_jitter(alpha = 0.1, size = 2.5, width = 0.3, height = 0.3) +
   geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5) +
-  scale_x_log10(labels = percent_format()) +
-  scale_y_log10(labels = percent_format()) +
+  # scale_x_log10(labels = percent_format()) +
+  # scale_y_log10(labels = percent_format()) +
   scale_color_gradient(limits = c(0, 0.001), low = "darkslategray4", high = "gray75") +
   facet_wrap(~source, ncol = 2) +
   theme(legend.position="none") +
   labs(y = "blog", x = NULL)
-  
+p8 
 
 
 # Q6. What are the frequencies of 2-grams and 3-grams in the dataset?
