@@ -2,8 +2,12 @@
 
 # 2018-12-12:
 
-NEXT: filter bigram and trigram list: 
+NEXT: pre-process documents using best practices before gathering bigrams & trigrams: 
+https://www.analyticsvidhya.com/blog/2015/10/6-practices-enhance-performance-text-classification-model/
+
+Then get back to: 
 https://www.tidytextmining.com/ngrams.html
+
 
 # Lesson: when doing exploratory analysis, visualize first, then run statistical test.
 
@@ -21,11 +25,22 @@ https://www.tidytextmining.com/ngrams.html
 
 2. What are the frequencies of 2-grams and 3-grams in the dataset?
 
-- remove stopword ngrams
-
+- Make sure to do the full data (not just a sample) once the code has been written before moving on to next question
 
 3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
+
+(What is this actually asking??)
+Possible answer: 
+https://www.analyticsvidhya.com/blog/2014/09/creating-dictionary-text-mining/
+
+Other references:
+https://en.wikipedia.org/wiki/Predictive_text#Dictionary_vs._non-dictionary_systems
+https://medium.com/parrot-prediction/the-tao-of-text-normalization-2e7aecd1861
+
+
+
 4. How do you evaluate how many of the words come from foreign languages?
+
 5. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
 
 
