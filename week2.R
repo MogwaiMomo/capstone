@@ -351,7 +351,15 @@ bigrams.twitter <- twitter.df %>%
 
 trigrams.blog <- blog.df %>%
   unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
-  count(trigram, sort = TRUE)
+  count(trigram, sort = TRUE) %>%
+  # split to find stopword-based ngrams
+  separate(trigram, c("word1","word2", "word3"), sep = " ") %>%
+  # remove number-based entries
+  filter(!grepl("[0-9]+", word1)) %>%
+  filter(!grepl("[0-9]+", word2)) %>%
+  filter(!grepl("[0-9]+", word3)) %>%
+  # filter out ngrams with stopwords in them
+  filter(!(word1 %in% custom_stopwords$word|word2 %in% custom_stopwords$word|word3 %in% custom_stopwords$word))
 
 trigrams.news <- news.df %>%
   unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
