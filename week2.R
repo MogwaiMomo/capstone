@@ -78,7 +78,6 @@ tidy.twitter <- twitter.df %>%
 
 
 # strip stopwords and profanities
-
 prof_url <- "https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt"
 # get text from url
 prof_file <- getURL(prof_url, ssl.verifyhost=FALSE, ssl.verifypeer=FALSE)
@@ -315,16 +314,37 @@ cor.test(data = filter(all.freq, all.freq$source == "twitter"), ~ proportion + b
 
 bigrams.blog <- blog.df %>%
   unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
-  count(bigram, sort = TRUE)
-  
+  count(bigram, sort = TRUE) %>%
+  # split to find stopword-based ngrams
+  separate(bigram, c("word1","word2"), sep = " ") %>%
+  # remove number-based entries
+  filter(!grepl("[0-9]+", word1)) %>%
+  filter(!grepl("[0-9]+", word2)) %>%
+  # filter out ngrams with stopwords in them
+  filter(!(word1 %in% custom_stopwords$word|word2 %in% custom_stopwords$word))
 
 bigrams.news <- news.df %>%
   unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
-  count(bigram, sort = TRUE)
+  count(bigram, sort = TRUE) %>%
+  # split to find stopword-based ngrams
+  separate(bigram, c("word1","word2"), sep = " ") %>%
+  # remove number-based entries
+  filter(!grepl("[0-9]+", word1)) %>%
+  filter(!grepl("[0-9]+", word2)) %>%
+  # filter out ngrams with stopwords in them
+  filter(!(word1 %in% custom_stopwords$word|word2 %in% custom_stopwords$word))
 
 bigrams.twitter <- twitter.df %>%
   unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
-  count(bigram, sort = TRUE)
+  count(bigram, sort = TRUE) %>%
+  # split to find stopword-based ngrams
+  separate(bigram, c("word1","word2"), sep = " ") %>%
+  # remove number-based entries
+  filter(!grepl("[0-9]+", word1)) %>%
+  filter(!grepl("[0-9]+", word2)) %>%
+  # filter out ngrams with stopwords in them
+  filter(!(word1 %in% custom_stopwords$word|word2 %in% custom_stopwords$word))
+
 
 
 # Tokenize by 3-grams
@@ -340,6 +360,8 @@ trigrams.news <- news.df %>%
 trigrams.twitter <- twitter.df %>%
   unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
   count(trigram, sort = TRUE)
+
+
 
 # Q7. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
 
