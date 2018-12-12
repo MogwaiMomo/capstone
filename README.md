@@ -1,6 +1,6 @@
 # TO DO LIST - WEEK 2
 
-# 2018-12-11:
+# 2018-12-12:
 
 NEXT: filter bigram and trigram list: 
 https://www.tidytextmining.com/ngrams.html
