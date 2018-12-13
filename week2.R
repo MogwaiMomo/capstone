@@ -89,8 +89,24 @@ tidy.twitter <- twitter.df %>%
   filter(!grepl("[0-9]+", word)) %>%
   filter(!(word %in% custom_stopwords$word))
 
+# create clean doc dfs
 
+# wrap paste function so it doesn't trigger an error from summarize
+reduce_paste <- function(v) {
+  Reduce(f=paste, x = v)
+}
 
+clean.blog.df <- tidy.blog %>%
+  group_by(line) %>%
+  summarise(text = reduce_paste(word))
+
+clean.news.df <- tidy.news %>%
+  group_by(line) %>%
+  summarise(text = reduce_paste(word))
+
+clean.twitter.df <- tidy.twitter %>%
+  group_by(line) %>%
+  summarise(text = reduce_paste(word))
 
 ### EXPLORATORY DATA ANALYSIS
 

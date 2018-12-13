@@ -6,6 +6,7 @@ NEXT: pre-process documents using best practices before gathering bigrams & trig
 https://www.analyticsvidhya.com/blog/2015/10/6-practices-enhance-performance-text-classification-model/
 
 1. DONE -  find and remove stopwords at the document level, not token level
+2. Lemmatize the words
 
 
 Then get back to: 
