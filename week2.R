@@ -56,11 +56,22 @@ getData <- function(file) {
 }
 
 
-
 # create line dfs with word counts
 blog.df <- getData(files[1])
 news.df <- getData(files[2])
 twitter.df <- getData(files[3])
+
+# create profanity-inclusive english stopword list
+prof_url <- "https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt"
+prof_file <- getURL(prof_url, ssl.verifyhost=FALSE, ssl.verifypeer=FALSE)
+prof_stopwords <- unlist(strsplit(prof_file, "\n"))
+custom_stopwords <- data_frame(
+  word = c(stopwords("english"), prof_stopwords),
+  lexicon = "custom"
+)
+data(stop_words)
+custom_stopwords <- rbind(stop_words, custom_stopwords)
+
 
 
 # create tidy tokenized df (filter out numbers)
@@ -77,19 +88,7 @@ tidy.twitter <- twitter.df %>%
   filter(!grepl("[0-9]+", word))
 
 
-# strip stopwords and profanities
-prof_url <- "https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt"
-# get text from url
-prof_file <- getURL(prof_url, ssl.verifyhost=FALSE, ssl.verifypeer=FALSE)
-# create profanity stopword character list
-prof_stopwords <- unlist(strsplit(prof_file, "\n"))
-# Create full stopwords list, including profanity terms
-custom_stopwords <- data_frame(
-  word = c(stopwords("english"), prof_stopwords),
-  lexicon = "custom"
-)
-data(stop_words)
-custom_stopwords <- rbind(stop_words, custom_stopwords)
+
 
 # strip stopwords & profanities
 tidy.blog <- tidy.blog %>%

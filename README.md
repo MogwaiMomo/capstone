@@ -1,9 +1,12 @@
 # TO DO LIST - WEEK 2
 
-# 2018-12-12:
+# 2018-12-13:
 
 NEXT: pre-process documents using best practices before gathering bigrams & trigrams: 
 https://www.analyticsvidhya.com/blog/2015/10/6-practices-enhance-performance-text-classification-model/
+
+1. find and remove stopwords at the document level, not token level
+
 
 Then get back to: 
 https://www.tidytextmining.com/ngrams.html
