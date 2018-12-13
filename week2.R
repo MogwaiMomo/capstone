@@ -321,66 +321,43 @@ cor.test(data = filter(all.freq, all.freq$source == "twitter"), ~ proportion + b
 
 # Tokenize by 2-grams
 
-bigrams.blog <- blog.df %>%
+bigrams.blog <- clean.blog.df %>%
   unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
   count(bigram, sort = TRUE) %>%
-  # split to find stopword-based ngrams
-  separate(bigram, c("word1","word2"), sep = " ") %>%
-  # remove number-based entries
-  filter(!grepl("[0-9]+", word1)) %>%
-  filter(!grepl("[0-9]+", word2)) %>%
-  # filter out ngrams with stopwords in them
-  filter(!(word1 %in% custom_stopwords$word|word2 %in% custom_stopwords$word))
+  filter(!is.na(bigram))
 
-bigrams.news <- news.df %>%
+bigrams.news <- clean.news.df %>%
   unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
   count(bigram, sort = TRUE) %>%
-  # split to find stopword-based ngrams
-  separate(bigram, c("word1","word2"), sep = " ") %>%
-  # remove number-based entries
-  filter(!grepl("[0-9]+", word1)) %>%
-  filter(!grepl("[0-9]+", word2)) %>%
-  # filter out ngrams with stopwords in them
-  filter(!(word1 %in% custom_stopwords$word|word2 %in% custom_stopwords$word))
+  filter(!is.na(bigram))
 
-bigrams.twitter <- twitter.df %>%
+bigrams.twitter <- clean.twitter.df %>%
   unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
   count(bigram, sort = TRUE) %>%
-  # split to find stopword-based ngrams
-  separate(bigram, c("word1","word2"), sep = " ") %>%
-  # remove number-based entries
-  filter(!grepl("[0-9]+", word1)) %>%
-  filter(!grepl("[0-9]+", word2)) %>%
-  # filter out ngrams with stopwords in them
-  filter(!(word1 %in% custom_stopwords$word|word2 %in% custom_stopwords$word))
+  filter(!is.na(bigram))
 
 
 
 # Tokenize by 3-grams
 
-trigrams.blog <- blog.df %>%
+trigrams.blog <- clean.blog.df %>%
   unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
   count(trigram, sort = TRUE) %>%
-  # split to find stopword-based ngrams
-  separate(trigram, c("word1","word2", "word3"), sep = " ") %>%
-  # remove number-based entries
-  filter(!grepl("[0-9]+", word1)) %>%
-  filter(!grepl("[0-9]+", word2)) %>%
-  filter(!grepl("[0-9]+", word3)) %>%
-  # filter out ngrams with stopwords in them
-  filter(!(word1 %in% custom_stopwords$word|word2 %in% custom_stopwords$word|word3 %in% custom_stopwords$word))
+  filter(!is.na(trigram))
 
-trigrams.news <- news.df %>%
+trigrams.news <- clean.news.df %>%
   unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
-  count(trigram, sort = TRUE)
+  count(trigram, sort = TRUE) %>%
+  filter(!is.na(trigram))
 
-trigrams.twitter <- twitter.df %>%
+trigrams.twitter <- clean.twitter.df %>%
   unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
-  count(trigram, sort = TRUE)
-
-
+  count(trigram, sort = TRUE) %>%
+  filter(!is.na(trigram))
 
 # Q7. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
+
+
 
 # Q8. How do you evaluate how many of the words come from foreign languages?
 
