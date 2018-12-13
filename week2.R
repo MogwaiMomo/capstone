@@ -73,30 +73,24 @@ data(stop_words)
 custom_stopwords <- rbind(stop_words, custom_stopwords)
 
 
-
-# create tidy tokenized df (filter out numbers)
+# create tidy tokenized df (filter out numbers & stopwords)
 tidy.blog <- blog.df %>%
   unnest_tokens(word, text) %>%
-  filter(!grepl("[0-9]+", word))
+  filter(!grepl("[0-9]+", word)) %>%
+  filter(!(word %in% custom_stopwords$word))
   
 tidy.news <- news.df %>%
   unnest_tokens(word, text) %>%
-  filter(!grepl("[0-9]+", word))
+  filter(!grepl("[0-9]+", word)) %>%
+  filter(!(word %in% custom_stopwords$word))
 
 tidy.twitter <- twitter.df %>%
   unnest_tokens(word, text) %>%
-  filter(!grepl("[0-9]+", word))
+  filter(!grepl("[0-9]+", word)) %>%
+  filter(!(word %in% custom_stopwords$word))
 
 
 
-
-# strip stopwords & profanities
-tidy.blog <- tidy.blog %>%
-  anti_join(custom_stopwords)
-tidy.news <- tidy.news %>%
-  anti_join(custom_stopwords)
-tidy.twitter <- tidy.twitter %>%
-  anti_join(custom_stopwords)
 
 ### EXPLORATORY DATA ANALYSIS
 
