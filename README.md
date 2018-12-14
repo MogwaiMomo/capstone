@@ -6,11 +6,9 @@ Pre-process documents using best practices before gathering bigrams & trigrams:
 
 https://www.analyticsvidhya.com/blog/2015/10/6-practices-enhance-performance-text-classification-model/
 
-NEXT: Lemmatize the words
+NEXT: tag parts of speech
 
 At some point: play around with tf-idf to find important words in different documents (try doing blog vs twitter vs news)
-
-
 
 Then get back to: 
 https://www.tidytextmining.com/ngrams.html

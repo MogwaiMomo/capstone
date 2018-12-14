@@ -16,6 +16,7 @@ library(wordcloud)
 library(RColorBrewer)
 library(ggpubr)
 library(textstem)
+# library(RDRPOSTagger) # rJava bug :/
 
 
 # download dataset from URL
