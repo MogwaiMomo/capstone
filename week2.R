@@ -58,9 +58,26 @@ getData <- function(file) {
 
 
 # create line dfs with word counts
-blog.df <- getData(files[1])
-news.df <- getData(files[2])
-twitter.df <- getData(files[3])
+raw.blog.df <- getData(files[1])
+raw.news.df <- getData(files[2])
+raw.twitter.df <- getData(files[3])
+
+# lemmatize documents
+lemma.blog.df <- data_frame(
+  line = raw.blog.df$line,
+  text = lemmatize_strings(raw.blog.df$text)
+)
+
+lemma.news.df <- data_frame(
+  line = raw.news.df$line,
+  text = lemmatize_strings(raw.news.df$text)
+)
+
+lemma.twitter.df <- data_frame(
+  line = raw.twitter.df$line,
+  text = lemmatize_strings(raw.twitter.df$text)
+)
+
 
 # create profanity-inclusive english stopword list
 prof_url <- "https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt"
@@ -75,22 +92,22 @@ custom_stopwords <- rbind(stop_words, custom_stopwords)
 
 
 # create tidy tokenized df (filter out numbers & stopwords)
-tidy.blog <- blog.df %>%
+tidy.blog <- lemma.blog.df %>%
   unnest_tokens(word, text) %>%
   filter(!grepl("[0-9]+", word)) %>%
   filter(!(word %in% custom_stopwords$word))
   
-tidy.news <- news.df %>%
+tidy.news <- lemma.news.df %>%
   unnest_tokens(word, text) %>%
   filter(!grepl("[0-9]+", word)) %>%
   filter(!(word %in% custom_stopwords$word))
 
-tidy.twitter <- twitter.df %>%
+tidy.twitter <- lemma.twitter.df %>%
   unnest_tokens(word, text) %>%
   filter(!grepl("[0-9]+", word)) %>%
   filter(!(word %in% custom_stopwords$word))
 
-# create clean doc dfs
+# create clean doc dfs (i.e recombine stopword-free tokens back into docs for further analysis)
 
 # wrap paste function so it doesn't trigger an error from summarize
 reduce_paste <- function(v) {
@@ -115,17 +132,17 @@ clean.twitter.df <- tidy.twitter %>%
 
 # Q1. Which text source is, on average, the longest format? The shortest?
 
-blog.docs <- blog.df %>%
+blog.docs <- raw.blog.df %>%
   mutate(char_count = nchar(text)) %>%
   select(line, text, char_count)
 blog.avg.char <- mean(blog.docs$char_count)
 
-news.docs <- news.df %>%
+news.docs <- raw.news.df %>%
   mutate(char_count = nchar(text)) %>%
   select(line, text, char_count)
 news.avg.char <- mean(news.docs$char_count)
 
-twitter.docs <- twitter.df %>%
+twitter.docs <- raw.twitter.df %>%
   mutate(char_count = nchar(text)) %>%
   select(line, text, char_count)
 twitter.avg.char <- mean(twitter.docs$char_count)
