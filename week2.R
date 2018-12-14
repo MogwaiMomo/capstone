@@ -15,6 +15,7 @@ library(SnowballC)
 library(wordcloud)
 library(RColorBrewer)
 library(ggpubr)
+library(textstem)
 
 
 # download dataset from URL
