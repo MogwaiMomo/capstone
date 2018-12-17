@@ -16,13 +16,18 @@ library(wordcloud)
 library(RColorBrewer)
 library(ggpubr)
 library(textstem)
+library(scales)
 # library(RDRPOSTagger) # rJava bug :/
-source('cleantexttidy.R')
+
 
 
 ### EXPLORATORY DATA ANALYSIS
 
-## Source-level analysis:
+# Clean the data using tidy methods:
+
+source('cleantexttidy.R')
+
+## SOURCE-LEVEL DATA ANALYSIS
 
 # Q1. Which text source is, on average, the longest format? The shortest?
 
@@ -54,94 +59,52 @@ print(paste("The highest diversity format is:", q4.max, "\n"))
 print(paste("The lowest diversity format is:", q4.min, "\n"))
 
 
+## TERM-LEVEL DATA ANALYSIS
+
 # Q5. Some words are more frequent than others - what are the distributions of word frequencies?
 
 source('week2q5.R')
 
 # Q6. Which words are common to all 3 sources?
 
+source('week2q6.R')
+print(paste("The terms common to all sources are shown in the following table: \n"))
 
-common_blog_news <- inner_join(blog.freq, news.freq, by = "word")
-common_news_twitter <- inner_join(news.freq, twitter.freq, by = "word")
-common_twitter_blog <- inner_join(twitter.freq, blog.freq, by = "word")
-common_full <- inner_join(common_blog_news, common_news_twitter, by = "word")
+common_full
 
-all.freq <- bind_rows(mutate(tidy.blog, source = "blog"),
-                      mutate(tidy.news, source = "news"),
-                      mutate(tidy.twitter, source = "twitter")) %>%
-  count(source, word) %>%
-  group_by(source) %>%
-  mutate(proportion = n / sum(n)) %>%
-  select(-n) %>%
-  spread(source, proportion) %>% # spread groups across columns
-  gather(source, proportion, "news":"twitter")
+# Visualization of term similarity between sources:
+print(paste("Compare term similarity across sources via the following visualization: \n"))
 
-# Visualization of word frequency similarity between sources
-library(scales)
-
-p8 <- ggplot(all.freq, aes(x = proportion, y = blog, color = blog- proportion)) +
-  geom_abline(color = "gray40", lty = 2) +
-  geom_jitter(alpha = 0.1, size = 2.5, width = 0.3, height = 0.3) +
-  geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5) +
-  scale_x_log10(labels = percent_format()) +
-  scale_y_log10(labels = percent_format()) +
-  scale_color_gradient(limits = c(0, 0.001), low = "darkslategray4", high = "gray75") +
-  facet_wrap(~source, ncol = 2) +
-  theme(legend.position="none") +
-  labs(y = "blog", x = NULL)
 p8 
 
-# Statistical test of word frequency similarity between sources
+# Statistical tests of word frequency similarity between sources:
 
 # blog vs news
-
 cor.test(data = filter(all.freq, all.freq$source == "news"), ~ proportion + blog)
+print(paste("There is a significant level of correlation between news and blog content, about 50% correlation.\n"))
 
-# Answer: significant level of correlation, about 50% similar
-
-# similarity between blog & twitter
-
+# blog vs twitter
 cor.test(data = filter(all.freq, all.freq$source == "twitter"), ~ proportion + blog)
-
-# Answer: significant level of correlation, about 60% similar
-
-# Q6. What are the frequencies of 2-grams and 3-grams in the dataset?
-
-# Tokenize by 2-grams
-
-bigrams.blog <- clean.blog.df %>%
-  unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
-  count(bigram, sort = TRUE) %>%
-  filter(!is.na(bigram))
-
-bigrams.news <- clean.news.df %>%
-  unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
-  count(bigram, sort = TRUE) %>%
-  filter(!is.na(bigram))
-
-bigrams.twitter <- clean.twitter.df %>%
-  unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
-  count(bigram, sort = TRUE) %>%
-  filter(!is.na(bigram))
+print(paste("There is a significant level of correlation between twitter and blog content, about 60% correlation.\n"))
 
 
+# Q7. What are the frequencies of 2-grams and 3-grams in the dataset?
 
-# Tokenize by 3-grams
+print(paste("Blog bigrams:\n"))
+bigrams.blog
+print(paste("News bigrams:\n"))
+bigrams.news
+print(paste("Twitter bigrams:\n"))
+bigrams.twitter
 
-trigrams.blog <- clean.blog.df %>%
-  unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
-  count(trigram, sort = TRUE) %>%
-  filter(!is.na(trigram))
+print(paste("Blog trigrams:\n"))
+trigrams.blog
+print(paste("News trigrams:\n"))
+trigrams.news
+print(paste("Twitter trigrams:\n"))
+trigrams.twitter
 
-trigrams.news <- clean.news.df %>%
-  unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
-  count(trigram, sort = TRUE) %>%
-  filter(!is.na(trigram))
 
-trigrams.twitter <- clean.twitter.df %>%
-  unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
-  count(trigram, sort = TRUE) %>%
-  filter(!is.na(trigram))
 
 # Q7. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
 
