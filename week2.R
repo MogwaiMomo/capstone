@@ -44,7 +44,7 @@ getData <- function(file) {
   # get the number of lines in file
   n <- getTotalLines(file)
   # uncomment line 35 if you want only a small sample of lines
-  n <- n*0.001
+  n <- n*0.01
   # open file connection
   con <- file(file, open="r")
   # read in all lines

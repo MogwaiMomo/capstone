@@ -2,15 +2,17 @@
 
 # 2018-12-14:
 
-Pre-process documents using best practices before gathering bigrams & trigrams: 
+Figure out how to create a dictionary for english text mining (and analyze coverage): 
+https://www.analyticsvidhya.com/blog/2014/09/creating-dictionary-text-mining/
+
+
+At some point: 
+
+1. play around with tf-idf to find important words in different documents (try doing blog vs twitter vs news)
+
+2. tag parts of speech
 
 https://www.analyticsvidhya.com/blog/2015/10/6-practices-enhance-performance-text-classification-model/
-
-NEXT: tag parts of speech
-
-At some point: play around with tf-idf to find important words in different documents (try doing blog vs twitter vs news)
-
-Then get back to: 
 https://www.tidytextmining.com/ngrams.html
 
 
@@ -28,9 +30,8 @@ https://www.tidytextmining.com/ngrams.html
 
 1. DONE - Some words are more frequent than others - what are the distributions of word frequencies?
 
-2. What are the frequencies of 2-grams and 3-grams in the dataset?
+2. DONE - What are the frequencies of 2-grams and 3-grams in the dataset?
 
-- Make sure to do the full data (not just a sample) once the code has been written before moving on to next question
 
 3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
 
