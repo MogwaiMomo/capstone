@@ -11,12 +11,11 @@ At some point:
 1. play around with tf-idf to find important words in different documents (try doing blog vs twitter vs news)
 
 2. tag parts of speech
-
 https://www.analyticsvidhya.com/blog/2015/10/6-practices-enhance-performance-text-classification-model/
 https://www.tidytextmining.com/ngrams.html
 
 
-# Lesson: when doing exploratory analysis, visualize first, then run statistical test.
+# Lesson: when doing exploratory analysis, always visualize first, then run statistical test.
 
 
 ## Tasks to accomplish
@@ -35,9 +34,14 @@ https://www.tidytextmining.com/ngrams.html
 
 3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
 
-(What is this actually asking??)
 Possible answer: 
 https://www.analyticsvidhya.com/blog/2014/09/creating-dictionary-text-mining/
+
+Notes: 
+
+- 
+
+
 
 Other references:
 https://en.wikipedia.org/wiki/Predictive_text#Dictionary_vs._non-dictionary_systems
