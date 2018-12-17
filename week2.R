@@ -17,280 +17,49 @@ library(RColorBrewer)
 library(ggpubr)
 library(textstem)
 # library(RDRPOSTagger) # rJava bug :/
+source('cleantexttidy.R')
 
-
-# download dataset from URL
-url <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
-destfile <- "./input/capstone-data.zip"
-
-download.file(url, destfile)
-unzip(destfile, exdir ="./input/")
-#remove zip file
-file.remove(destfile)
-# create paths to each data file
-file_dir <- paste(getwd(),"input/final/en_US", sep="/")
-files <- list.files(file_dir, full.names = TRUE)
-
-
-# get the number of lines in file
-getTotalLines <- function(file) {
-  com <- paste0("wc -l ", file, " | awk '{ print $1 }'")
-  n <- as.numeric(system(command=com, intern=TRUE))
-  return(n)    
-}
-
-# read in text from files
-getData <- function(file) {
-  # get the number of lines in file
-  n <- getTotalLines(file)
-  # uncomment line 35 if you want only a small sample of lines
-  n <- n*0.01
-  # open file connection
-  con <- file(file, open="r")
-  # read in all lines
-  lines <- as.data.frame(readLines(con, n, warn = FALSE))
-  names(lines) <- c("text")
-  #close connection
-  close(con)
-  lines$line = seq(1, nrow(lines), 1)
-  lines <- lines %>% select(line, text)
-  return(lines)
-}
-
-
-# create line dfs with word counts
-raw.blog.df <- getData(files[1])
-raw.news.df <- getData(files[2])
-raw.twitter.df <- getData(files[3])
-
-# lemmatize documents
-lemma.blog.df <- data_frame(
-  line = raw.blog.df$line,
-  text = lemmatize_strings(raw.blog.df$text)
-)
-
-lemma.news.df <- data_frame(
-  line = raw.news.df$line,
-  text = lemmatize_strings(raw.news.df$text)
-)
-
-lemma.twitter.df <- data_frame(
-  line = raw.twitter.df$line,
-  text = lemmatize_strings(raw.twitter.df$text)
-)
-
-
-# create profanity-inclusive english stopword list
-prof_url <- "https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt"
-prof_file <- getURL(prof_url, ssl.verifyhost=FALSE, ssl.verifypeer=FALSE)
-prof_stopwords <- unlist(strsplit(prof_file, "\n"))
-custom_stopwords <- data_frame(
-  word = c(stopwords("english"), prof_stopwords),
-  lexicon = "custom"
-)
-data(stop_words)
-custom_stopwords <- rbind(stop_words, custom_stopwords)
-
-
-# create tidy tokenized df (filter out numbers & stopwords)
-tidy.blog <- lemma.blog.df %>%
-  unnest_tokens(word, text) %>%
-  filter(!grepl("[0-9]+", word)) %>%
-  filter(!(word %in% custom_stopwords$word))
-  
-tidy.news <- lemma.news.df %>%
-  unnest_tokens(word, text) %>%
-  filter(!grepl("[0-9]+", word)) %>%
-  filter(!(word %in% custom_stopwords$word))
-
-tidy.twitter <- lemma.twitter.df %>%
-  unnest_tokens(word, text) %>%
-  filter(!grepl("[0-9]+", word)) %>%
-  filter(!(word %in% custom_stopwords$word))
-
-# create clean doc dfs (i.e recombine stopword-free tokens back into docs for further analysis)
-
-# wrap paste function so it doesn't trigger an error from summarize
-reduce_paste <- function(v) {
-  Reduce(f=paste, x = v)
-}
-
-clean.blog.df <- tidy.blog %>%
-  group_by(line) %>%
-  summarise(text = reduce_paste(word))
-
-clean.news.df <- tidy.news %>%
-  group_by(line) %>%
-  summarise(text = reduce_paste(word))
-
-clean.twitter.df <- tidy.twitter %>%
-  group_by(line) %>%
-  summarise(text = reduce_paste(word))
 
 ### EXPLORATORY DATA ANALYSIS
 
-## Document-type analysis
+## Source-level analysis:
 
 # Q1. Which text source is, on average, the longest format? The shortest?
 
-blog.docs <- raw.blog.df %>%
-  mutate(char_count = nchar(text)) %>%
-  select(line, text, char_count)
-blog.avg.char <- mean(blog.docs$char_count)
+source('week2q1.R')
+print(paste("The longest format is:", q1.max, "\n"))
+print(paste("The shortest format is:", q1.min, "\n"))
 
-news.docs <- raw.news.df %>%
-  mutate(char_count = nchar(text)) %>%
-  select(line, text, char_count)
-news.avg.char <- mean(news.docs$char_count)
-
-twitter.docs <- raw.twitter.df %>%
-  mutate(char_count = nchar(text)) %>%
-  select(line, text, char_count)
-twitter.avg.char <- mean(twitter.docs$char_count)
-
-mean.doc.length <- list(
-  "blog" = blog.avg.char,
-  "news" = news.avg.char,
-  "twitter" = twitter.avg.char
-)
-
-q1.max <- mean.doc.length[which.max(mean.doc.length)]
-q1.min <- mean.doc.length[which.min(mean.doc.length)]
 
 # Q2. Are these document lengths normally distributed?
 
-# blog histogram  
-p1 <- ggplot(data = blog.docs, aes(char_count)) 
-p1 <- p1 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(blog.docs$char_count), color="red")
-p1 <- p1 + ggtitle("blog document length: histogram") + xlab("char. length") + ylab("# docs")
-
-# blog qqplot
-p2 <- ggplot(data = blog.docs, aes(sample = char_count))
-p2 <- p2 + stat_qq() + stat_qq_line()
-p2 <- p2 + ggtitle("blog document length: qq-plot")
-
-# news histogram 
-p3 <- ggplot(data = news.docs, aes(char_count)) 
-p3 <- p3 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(news.docs$char_count), color="red")
-p3 <- p3 + ggtitle("news document length: histogram") + xlab("char. length") + ylab("# docs")
-
-# news qqplot
-p4 <- ggplot(data = news.docs, aes(sample = char_count))
-p4 <- p4 + stat_qq() + stat_qq_line()
-p4 <- p4 + ggtitle("news document length: qq-plot") 
-
-# twitter histogram  
-p5 <- ggplot(data = twitter.docs, aes(char_count)) 
-p5 <- p5 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(twitter.docs$char_count), color="red")
-p5 <- p5 + ggtitle("twitter document length: histogram") + xlab("char. length") + ylab("# docs")
-
-# twitter qqplot
-p6 <- ggplot(data = twitter.docs, aes(sample = char_count))
-p6 <- p6 + stat_qq() + stat_qq_line()
-p6 <- p6 + ggtitle("twitter document length: qq-plot")
-
 # show plots side by side
+source('week2q2.R')
 grid.arrange(p1, p2, p3, p4, p5, p6, ncol=2)
+print(paste("None of the document lengths look normally distributed."))
 
 # Q3. Are the different sources *significantly* different in length? 
-
-blog.docs <- blog.docs %>%
-  mutate(type = "blog")
-
-news.docs <- news.docs %>%
-  mutate(type = "news")
-
-twitter.docs <- twitter.docs %>%
-  mutate(type = "twitter")
-
-KWdata <- rbind(blog.docs, news.docs, twitter.docs)
-KWdata$type = as.factor(KWdata$type)
-
-# Visualize the 3 groups using a boxplot:
-
-p7 <- ggplot(data = KWdata, aes(type, char_count))
-p7 <- p7 + geom_boxplot() 
+source('week2q3.R')
 p7
-
 # Run a test to be sure:
 kruskal.test(KWdata$char_count, KWdata$type)
-
-# Answer: Yes, according to the KW test, they are significantly different in length.
+print("Answer: Yes, according to the KW test, they are significantly different in length.")
 
 # Q4. Which text source has HIGHEST word diversity (most # of words)? What about the LOWEST? 
 
 # Get total number of unique terms in each corpus 
 
-blog.freq <- tidy.blog %>%
-  count(word, sort = TRUE)
+source('week2q4.R')
+print(paste("The highest diversity format is:", q4.max, "\n"))
+print(paste("The lowest diversity format is:", q4.min, "\n"))
 
-news.freq <- tidy.news %>%
-  count(word, sort = TRUE)
-
-twitter.freq <- tidy.twitter %>%
-  count(word, sort = TRUE)
-
-total.words <- list(
-  "blog" = nrow(blog.freq),
-  "twitter" = nrow(twitter.freq),
-  "news" = nrow(news.freq)
-)
-
-q4.max <- total.words[which.max(total.words)]
-q4.max
-
-q4.min <- total.words[which.min(total.words)]
-q4.min
 
 # Q5. Some words are more frequent than others - what are the distributions of word frequencies?
 
-# Generate word cloud: Blog
-png("output/blog_wordcloud.png", width=1280,height=800)
-wordcloud(
-  blog.freq$word, 
-  blog.freq$n,
-  scale=c(8,.3),
-  min.freq = 1, 
-  max.words = 1000, 
-  random.order=FALSE, 
-  random.color = FALSE, 
-  rot.per=0.15, 
-  colors=brewer.pal(12, "Blues")
-)
-dev.off()
+source('week2q5.R')
 
+# Q6. Which words are common to all 3 sources?
 
-# Generate word cloud: News
-png("output/news_wordcloud.png", width=1280,height=800)
-wordcloud(
-  news.freq$word, 
-  news.freq$n,
-  scale=c(8,.3),
-  min.freq = 1, 
-  max.words = 1000, 
-  random.order=FALSE, 
-  random.color = FALSE, 
-  rot.per=0.15, 
-  colors=brewer.pal(12, "Reds")
-)
-dev.off()
-
-# Generate word cloud: Twitter
-png("output/twitter_wordcloud.png", width=1280,height=800)
-wordcloud(
-  twitter.freq$word, 
-  twitter.freq$n,
-  scale=c(8,.3),
-  min.freq = 1, 
-  max.words = 1000, 
-  random.order=FALSE, 
-  random.color = FALSE, 
-  rot.per=0.15, 
-  colors=brewer.pal(12, "Greens")
-)
-dev.off()
-
-# which words are common to all 3 sources?
 
 common_blog_news <- inner_join(blog.freq, news.freq, by = "word")
 common_news_twitter <- inner_join(news.freq, twitter.freq, by = "word")

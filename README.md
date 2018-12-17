@@ -39,7 +39,10 @@ https://www.analyticsvidhya.com/blog/2014/09/creating-dictionary-text-mining/
 
 Notes: 
 
-- 
+- you can make word-based or n-gram based dictionaries. Start with word-based.
+
+
+
 
 
 
