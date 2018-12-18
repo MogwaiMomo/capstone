@@ -40,7 +40,7 @@ https://www.analyticsvidhya.com/blog/2014/09/creating-dictionary-text-mining/
 Notes: 
 
 - you can make word-based or n-gram based dictionaries. Start with word-based.
-- once you have a freq-sorted list of words, you need to categorize as either 'confirm', 'suspect' or 'ignore'
+- once you have a freq-sorted list of words, you need to categorize as either 'confirm (included)', 'suspect (leftover)' or 'ignore (excluded)'
 - in order to categorize, we need to create a classification/clustering model
 
 
