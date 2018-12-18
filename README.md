@@ -32,9 +32,14 @@ https://www.tidytextmining.com/ngrams.html
 2. DONE - What are the frequencies of 2-grams and 3-grams in the dataset?
 
 
-3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the source? 90%?
+3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the corpus? 90%?
 
-
+- get list of single unique words from all sources
+- get total list of word instances
+- calculate 50% of word instances
+- create a while loop that adds up words in the list to its own table until freq hits 50%
+- get nrows of that list
+- do the same for 90%
 
 
 Possible answer: 
