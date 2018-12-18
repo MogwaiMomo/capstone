@@ -32,7 +32,10 @@ https://www.tidytextmining.com/ngrams.html
 2. DONE - What are the frequencies of 2-grams and 3-grams in the dataset?
 
 
-3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
+3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the source? 90%?
+
+
+
 
 Possible answer: 
 https://www.analyticsvidhya.com/blog/2014/09/creating-dictionary-text-mining/
