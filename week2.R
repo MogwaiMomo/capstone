@@ -108,7 +108,7 @@ trigrams.news
 print(paste("Twitter trigrams:"))
 trigrams.twitter
 
-# Q7. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
+# Q8. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
 
 # get list of single unique words from all sources
 
@@ -122,11 +122,26 @@ all.freq <- full_join(blog.news.freq, twitter.freq, by = "word") %>%
   mutate(freq = blog.news.n + n) %>%
   select(word, freq)
 
-# calculate 50% of word instances
-sum.freq <- apply(all.freq, 1, sum)
-# create a while loop that adds up words in the list to its own table until freq hits 50%
-# get nrows of that list
-# do the same for 90%
+# calculate 50%, 90% of word instances
+sum.freq <- colSums(all.freq[,"freq"], na.rm = TRUE)
+fifty.perc <- sum.freq * 0.5
+ninety.perc <- sum.freq * 0.9
+
+# create a while loop that adds up words in the list to its own table until freq hits 50%, 90%
+setCoverage <- function(df, cov) {
+  for(i in 1:nrow(df)) {
+    tmp <- df[1:i, ]
+    full.coverage <- colSums(df[,"freq"], na.rm = TRUE)
+    coverage <- colSums(tmp[,"freq"], na.rm = TRUE) / full.coverage  
+    if (coverage >= cov)
+      break
+  }
+  return(nrow(tmp))
+}
+
+setCoverage(all.freq, 0.5)
+setCoverage(all.freq, 0.9)
+
 
 # Q8. How do you evaluate how many of the words come from foreign languages?
 
