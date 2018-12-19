@@ -1,9 +1,5 @@
 # TO DO LIST - WEEK 2
 
-# 2018-12-14:
-
-Figure out how to create a dictionary for english text mining (and analyze coverage): 
-https://www.analyticsvidhya.com/blog/2014/09/creating-dictionary-text-mining/
 
 
 At some point: 
@@ -13,9 +9,6 @@ At some point:
 2. tag parts of speech
 https://www.analyticsvidhya.com/blog/2015/10/6-practices-enhance-performance-text-classification-model/
 https://www.tidytextmining.com/ngrams.html
-
-
-# Lesson: when doing exploratory analysis, always visualize first, then run statistical test.
 
 
 ## Tasks to accomplish
@@ -32,32 +25,7 @@ https://www.tidytextmining.com/ngrams.html
 2. DONE - What are the frequencies of 2-grams and 3-grams in the dataset?
 
 
-3. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the corpus? 90%?
-
-- get list of single unique words from all sources
-- get total list of word instances
-- calculate 50% of word instances
-- create a while loop that adds up words in the list to its own table until freq hits 50%
-- get nrows of that list
-- do the same for 90%
-
-
-Possible answer: 
-https://www.analyticsvidhya.com/blog/2014/09/creating-dictionary-text-mining/
-
-Notes: 
-
-- you can make word-based or n-gram based dictionaries. Start with word-based.
-- once you have a freq-sorted list of words, you need to categorize as either 'confirm (included)', 'suspect (leftover)' or 'ignore (excluded)'
-- in order to categorize, we need to create a classification/clustering model
-
-
-
-Other references:
-https://en.wikipedia.org/wiki/Predictive_text#Dictionary_vs._non-dictionary_systems
-https://medium.com/parrot-prediction/the-tao-of-text-normalization-2e7aecd1861
-
-
+3. DONE - How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the corpus? 90%?
 
 4. How do you evaluate how many of the words come from foreign languages?
 
