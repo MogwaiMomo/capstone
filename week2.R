@@ -123,6 +123,7 @@ all.freq <- full_join(blog.news.freq, twitter.freq, by = "word") %>%
   select(word, freq)
 
 # calculate 50% of word instances
+sum.freq <- apply(all.freq, 1, sum)
 # create a while loop that adds up words in the list to its own table until freq hits 50%
 # get nrows of that list
 # do the same for 90%
