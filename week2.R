@@ -110,40 +110,19 @@ trigrams.twitter
 
 # Q8. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
 
-# get list of single unique words from all sources
-
-# blog + news
-blog.news.freq <- full_join(blog.freq, news.freq, by = "word") %>%
-  mutate(blog.news.n = n.x + n.y) %>%
-  select(-c(n.x, n.y))
-
-# blog + news + twitter
-all.freq <- full_join(blog.news.freq, twitter.freq, by = "word") %>%
-  mutate(freq = blog.news.n + n) %>%
-  select(word, freq)
-
-# calculate 50%, 90% of word instances
-sum.freq <- colSums(all.freq[,"freq"], na.rm = TRUE)
-fifty.perc <- sum.freq * 0.5
-ninety.perc <- sum.freq * 0.9
-
-# create a while loop that adds up words in the list to its own table until freq hits 50%, 90%
-setCoverage <- function(df, cov) {
-  for(i in 1:nrow(df)) {
-    tmp <- df[1:i, ]
-    full.coverage <- colSums(df[,"freq"], na.rm = TRUE)
-    coverage <- colSums(tmp[,"freq"], na.rm = TRUE) / full.coverage  
-    if (coverage >= cov)
-      break
-  }
-  return(nrow(tmp))
-}
+source("week2q8.R")
 
 setCoverage(all.freq, 0.5)
 setCoverage(all.freq, 0.9)
 
 
 # Q8. How do you evaluate how many of the words come from foreign languages?
+
+# Get English dictionary from ?
+
+# Categorize words, create leftover/suspect word list
+
+# 
 
 # Q9. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
 
@@ -154,14 +133,20 @@ setCoverage(all.freq, 0.9)
 # Tasks to accomplish
 
 # Build basic n-gram model - using the exploratory analysis you performed, build a basic n-gram model for predicting the next word based on the previous 1, 2, or 3 words.
+
 # Build a model to handle unseen n-grams - in some cases people will want to type a combination of words that does not appear in the corpora. Build a model to handle cases where a particular n-gram isn't observed.
 
 # Questions to consider
 # 
 # How can you efficiently store an n-gram model (think Markov Chains)?
+
 # How can you use the knowledge about word frequencies to make your model smaller and more efficient?
+
 # How many parameters do you need (i.e. how big is n in your n-gram model)?
+
 # Can you think of simple ways to "smooth" the probabilities (think about giving all n-grams a non-zero probability even if they aren't observed in the data) ?
+
 # How do you evaluate whether your model is any good?
+
 # How can you use backoff models to estimate the probability of unobserved n-grams?
 
