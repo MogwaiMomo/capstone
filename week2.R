@@ -17,8 +17,8 @@ library(RColorBrewer)
 library(ggpubr)
 library(textstem)
 library(scales)
-# library(wordnet) #rJava bug
-# library(RDRPOSTagger) # rJava bug
+library(wordnet) #rJava bug
+library(RDRPOSTagger) # rJava bug
 
 
 
@@ -119,10 +119,10 @@ setCoverage(all.freq, 0.9)
 # Q8. How do you evaluate how many of the words come from foreign languages?
 
 # Get English dictionary from ?
-
 # Categorize words, create leftover/suspect word list
+# Get foreign lang dictionary from ?
+# Cross-ref suspect words against foreign languages
 
-# 
 
 # Q9. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
 
