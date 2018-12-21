@@ -118,7 +118,8 @@ setCoverage(all.freq, 0.9)
 
 # Q8. How do you evaluate how many of the words come from foreign languages?
 
-# Get English dictionary from ?
+library(quanteda)
+
 # Categorize words, create leftover/suspect word list
 # Get foreign lang dictionary from ?
 # Cross-ref suspect words against foreign languages
