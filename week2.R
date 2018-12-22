@@ -17,8 +17,8 @@ library(RColorBrewer)
 library(ggpubr)
 library(textstem)
 library(scales)
-library(wordnet) #rJava bug
-library(RDRPOSTagger) # rJava bug
+library(wordnet)
+library(RDRPOSTagger)
 
 
 
@@ -118,7 +118,6 @@ setCoverage(all.freq, 0.9)
 
 # Q8. How do you evaluate how many of the words come from foreign languages?
 
-# start with tidytext dictionary
 data(sentiments)
 dict.df <- sentiments %>%
   select(word) %>%
@@ -131,6 +130,21 @@ all.freq.lang <- all.freq %>%
   mutate(lang = ifelse(word %in% dict, "english", "unknown"))
 
 # works but coverage is garbage. Need a different dictionary!
+
+# NEXT: extract full dictionary from Wordnet, and match against that:
+
+# create Wordnet dictionary instance
+
+# try filtering for all words - not efficient, don't do this. 
+
+if(initDict()) {
+  all.filter <- getTermFilter("RegexFilter", ".+", TRUE)
+  all.nouns <- getIndexTerms("NOUN", 1000, all.filter)
+  dict2 <- as.dataframe(sapply(all.nouns, getLemma))
+}
+
+
+
   
 
 # Get foreign lang dictionary from ?
