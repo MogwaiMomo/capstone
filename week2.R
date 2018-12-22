@@ -118,9 +118,21 @@ setCoverage(all.freq, 0.9)
 
 # Q8. How do you evaluate how many of the words come from foreign languages?
 
-library(quanteda)
+# start with tidytext dictionary
+data(sentiments)
+dict.df <- sentiments %>%
+  select(word) %>%
+  unique()
+dict <- dict.df$word
 
-# Categorize words, create leftover/suspect word list
+# Categorize words, identify english vs. suspect words
+
+all.freq.lang <- all.freq %>%
+  mutate(lang = ifelse(word %in% dict, "english", "unknown"))
+
+# works but coverage is garbage. Need a different dictionary!
+  
+
 # Get foreign lang dictionary from ?
 # Cross-ref suspect words against foreign languages
 
