@@ -1,6 +1,6 @@
 # TO DO LIST - WEEK 2
 
-
+NEXT: try to query Wordnet with each term in my list, using filters, etc., and find matches. Create a list of unknown/unrecognized terms. 
 
 At some point: 
 
