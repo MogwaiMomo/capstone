@@ -120,24 +120,24 @@ setCoverage(all.freq, 0.9)
 
 library(cld3)
 
-# step 1: identify documents that are in english using detect_language_mixed()
-
-# input:
-
-# news.docs
-# blog.docs
-# twitter.docs
-
 # test it out
 test.df <- news.docs
 
-# detect language of each doc
+# create a wrapper func
+detect_lang <- function(x) {
+  ans.df <- detect_language_mixed(x)
+  ans <- ans.df[1,2]
+  return(ans)
+}
+
+# try for loop version
+for(i in 1:nrow(test.df)) { 
+  detect_lang(test.df$text[i]) 
+}
+
+# try it using mutate
 test.df.lang <- test.df %>%
-  mutate(lang = detect_language(text))
- 
-
-
-
+  mutate(lang = detect_lang(text))
 
 # Q9. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
 
