@@ -1,6 +1,8 @@
 # TO DO LIST - WEEK 2
 
-NEXT: try to query Wordnet with each term in my list, using filters, etc., and find matches. Create a list of unknown/unrecognized terms. 
+20181226 - Try to query Wordnet with each term in my list, using filters, etc., and find matches. Create a list of unknown/unrecognized terms. 
+
+NEXT:
 
 At some point: 
 
