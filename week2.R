@@ -118,37 +118,25 @@ setCoverage(all.freq, 0.9)
 
 # Q8. How do you evaluate how many of the words come from foreign languages?
 
-data(sentiments)
-dict.df <- sentiments %>%
-  select(word) %>%
-  unique()
-dict <- dict.df$word
+library(cld3)
 
-# Categorize words, identify english vs. suspect words
+# step 1: identify documents that are in english using detect_language_mixed()
 
-all.freq.lang <- all.freq %>%
-  mutate(lang = ifelse(word %in% dict, "english", "unknown"))
+# input:
 
-# works but coverage is garbage. Need a different dictionary!
+# news.docs
+# blog.docs
+# twitter.docs
 
-# NEXT: extract full dictionary from Wordnet, and match against that:
+# test it out
+test.df <- news.docs
 
-# create Wordnet dictionary instance
-
-# try filtering for all words - not efficient, don't do this. 
-
-if(initDict()) {
-  all.filter <- getTermFilter("RegexFilter", ".+", TRUE)
-  all.nouns <- getIndexTerms("NOUN", 1000, all.filter)
-  dict2 <- as.dataframe(sapply(all.nouns, getLemma))
-}
+# detect language of each doc
+test.df.lang <- test.df %>%
+  mutate(lang = detect_language(text))
+ 
 
 
-
-  
-
-# Get foreign lang dictionary from ?
-# Cross-ref suspect words against foreign languages
 
 
 # Q9. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?

@@ -1,8 +1,7 @@
 # TO DO LIST - WEEK 2
 
-20181226 - Try to query Wordnet with each term in my list, using filters, etc., and find matches. Create a list of unknown/unrecognized terms. 
+20181226 - try using CLD3 package to detect language  
 
-NEXT:
 
 At some point: 
 
@@ -11,6 +10,9 @@ At some point:
 2. tag parts of speech
 https://www.analyticsvidhya.com/blog/2015/10/6-practices-enhance-performance-text-classification-model/
 https://www.tidytextmining.com/ngrams.html
+
+3. Try to query Wordnet with each term in my list, using filters, etc., and find matches. Create a list of unknown/unrecognized terms.
+
 
 
 ## Tasks to accomplish
