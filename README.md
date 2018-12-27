@@ -1,6 +1,10 @@
 # TO DO LIST - WEEK 2
 
-20181226 - try using CLD3 package to detect language  
+20181227: 
+
+1. Replace mutate (buggy), with apply() instead
+
+2. Try to query Wordnet with each term in my list, using filters, etc., and find matches. Create a list of unknown/unrecognized terms.  
 
 
 At some point: 
@@ -11,7 +15,7 @@ At some point:
 https://www.analyticsvidhya.com/blog/2015/10/6-practices-enhance-performance-text-classification-model/
 https://www.tidytextmining.com/ngrams.html
 
-3. Try to query Wordnet with each term in my list, using filters, etc., and find matches. Create a list of unknown/unrecognized terms.
+3. 
 
 
 
@@ -27,7 +31,6 @@ https://www.tidytextmining.com/ngrams.html
 1. DONE - Some words are more frequent than others - what are the distributions of word frequencies?
 
 2. DONE - What are the frequencies of 2-grams and 3-grams in the dataset?
-
 
 3. DONE - How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the corpus? 90%?
 
@@ -45,10 +48,15 @@ https://www.tidytextmining.com/ngrams.html
 #### Questions to consider
 
 1. How can you efficiently store an n-gram model (think Markov Chains)?
+
 2. How can you use the knowledge about word frequencies to make your model smaller and more efficient?
+
 3. How many parameters do you need (i.e. how big is n in your n-gram model)?
+
 4. Can you think of simple ways to "smooth" the probabilities (think about giving all n-grams a non-zero probability even if they aren't observed in the data) ?
+
 5. How do you evaluate whether your model is any good?
+
 6. How can you use backoff models to estimate the probability of unobserved n-grams?
 
 ---
