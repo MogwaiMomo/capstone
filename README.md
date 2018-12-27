@@ -1,13 +1,13 @@
 # TO DO LIST - WEEK 2
 
-20181227: 
-
-1. Replace mutate (buggy), with apply() instead
-
-2. Try to query Wordnet with each term in my list, using filters, etc., and find matches. Create a list of unknown/unrecognized terms.  
+NEXT: Create a basic n-gram model to predict the next word after 1, 2, or 3 words. 
 
 
-At some point: 
+https://vitalflux.com/n-gram-language-models-explained-examples/
+https://medium.com/ymedialabs-innovation/next-word-prediction-using-markov-model-570fc0475f96
+
+
+At some point, also try: 
 
 1. play around with tf-idf to find important words in different documents (try doing blog vs twitter vs news)
 
@@ -15,8 +15,9 @@ At some point:
 https://www.analyticsvidhya.com/blog/2015/10/6-practices-enhance-performance-text-classification-model/
 https://www.tidytextmining.com/ngrams.html
 
-3. 
+3. Try to query Wordnet with each term in my list, using filters, etc., and find matches. Create a list of unknown/unrecognized terms.
 
+4. Learn how to increase coverage of new terms (do this after making a basic shitty model)
 
 
 ## Tasks to accomplish
@@ -24,6 +25,7 @@ https://www.tidytextmining.com/ngrams.html
 ### PART 1: Exploratory analysis
 
 1. Perform a thorough exploratory analysis of the data, understanding the distribution of words and relationship between the words in the corpora.
+
 2. Understand frequencies of words and word pairs - build figures and tables to understand variation in the frequencies of words and word pairs in the data.
 
 #### Questions to consider
