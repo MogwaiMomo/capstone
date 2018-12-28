@@ -4,6 +4,12 @@
 
 https://medium.com/ymedialabs-innovation/next-word-prediction-using-markov-model-570fc0475f96
 
+- Treat every word as a state and predict the next word based on the previous state, as simple as that.
+
+- Stages of making the model: 
+  - Tokenize the data
+  - Build the state pairs (initial, first, and second-order probabilities. also 'END' pair for end of sentences.)
+  - Do simple counts and calculate probabilities 
 
 At some point, also try: 
 
