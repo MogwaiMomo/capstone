@@ -132,14 +132,22 @@ source("week2q9.R")
 
 # Build basic n-gram model - using the exploratory analysis you performed, build a basic n-gram model for predicting the next word based on the previous 1, 2, or 3 words.
 
-# Will use 10-fold cross validation for test-error estimation. Train the data on the blog text.
+# General methodology: Treat every token as a state and predict the next word based on the previous state.
+
+  # Stages of making the model:
+
+    # Tokenize the data
+
+    # Build the state pairs
+        # initial word 
+        # first word (no prev2 word) 
+        # second-order probabilities. 
+        # 'END' pair for end of sentences.)
+    # Do simple counts and calculate probabilities 
+    # (i.e. create a transition matrix)
 
 
-
-# 2. Input: 2 words Output: 1 word (3 most likely options to choose from)
-
-
-
+# Will use 10-fold cross validation for test-error estimation. Train the data on the blog text. (Look into Caret package and 'cv' options for this.)
 
 
 # Build a model to handle unseen n-grams - in some cases people will want to type a combination of words that does not appear in the corpora. Build a model to handle cases where a particular n-gram isn't observed.
