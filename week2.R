@@ -121,7 +121,6 @@ setCoverage(all.freq, 0.9)
 source("week2q9.R")
 
 
-
 # Q9. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
 
 
@@ -138,11 +137,27 @@ source("week2q9.R")
 
     # Tokenize the data
 
+      # Training data: 
+
+      training_data <- blog.docs %>%
+        select(line, text)
+      # remove punctuation
+      
+      # remove capitalization
+      
+    
+
+
     # Build the state pairs
+
         # initial word 
+
         # first word (no prev2 word) 
-        # second-order probabilities. 
-        # 'END' pair for end of sentences.)
+
+        # second-order probabilities
+
+        # 'END' pair for end of sentences
+
     # Do simple counts and calculate probabilities 
     # (i.e. create a transition matrix)
 
