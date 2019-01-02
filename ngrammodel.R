@@ -9,57 +9,39 @@
 training_data <- blog.docs %>%
   select(doc_id = line, text)
 
-# write sample lists to corpora
-createCorpus <- function(text.df) {
-  # create doc_id column
-  corpus <- Corpus(DataframeSource(text.df))
-  return(corpus)
-}
 
-# Write function that cleans and tokenizes lines of text
-cleanString <- function(corpus) {
-  # get profanity lists
-  prof_url <- "https://raw.githubusercontent.com/xavier/expletive/master/data/english.txt"
-  # get text from urls
-  prof_file <- getURL(prof_url, ssl.verifyhost=FALSE, ssl.verifypeer=FALSE)
-  # create profane stopword character list
-  prof_stopwords <- unlist(strsplit(prof_file, "\n"))
-  
-  # Create full stopwords list, including profanity terms
-  custom_stopwords <- c(stopwords("english"), prof_stopwords)
-  # lowercase
-  corpus <- tm_map(corpus, content_transformer(tolower))
-  #create toSpace content transformer to deal with hyphen/colon issues
-  toSpace <- content_transformer(function(x, pattern) {return (gsub(pattern, " ", x))})
-  # corpus <- tm_map(corpus, toSpace, "-")
-  # corpus <- tm_map(corpus, toSpace, ":")
-  # corpus <- tm_map(corpus, toSpace, "’")
-  # corpus <- tm_map(corpus, toSpace, "‘")
-  # corpus <- tm_map(corpus, toSpace, "“")
-  # corpus <- tm_map(corpus, toSpace, "”")
-  # corpus <- tm_map(corpus, toSpace, "—")
-  # corpus <- tm_map(corpus, toSpace, " -")
-  # remove punctuation
-  corpus <- tm_map(corpus, FUN = removePunctuation)
-  # remove numbers
-  corpus <- tm_map(corpus, FUN = removeNumbers)
-  # strip whitespace
-  corpus <- tm_map(corpus, FUN = stripWhitespace)
-  # remove stopwords
-  #corpus <- tm_map(corpus, removeWords, custom_stopwords)
-  return(corpus)
-  # stem document
-  #corpus <- tm_map(corpus, stemDocument)
-}
+# load textmineR package
+library(textmineR)
 
-# create corpus
-training_corp <- createCorpus(training_data)
+# helpful references:
+# https://datawarrior.wordpress.com/2018/01/22/document-term-matrix-text-mining-in-r-and-python/
+# https://cran.r-project.org/web/packages/textmineR/vignettes/a_start_here.html
 
-# clean each sample corpus
-system.time(clean_corp <- cleanString(training_corp))
+# create dtm
+dtm <- CreateDtm(training_data$text,
+                doc_names = training_data$doc_id,
+                ngram_window = c(1, 3),
+                lower = TRUE,
+                remove_punctuation = TRUE,
+                remove_numbers = TRUE
+                #stem_lemma_function = wordStem
+)
+
+# Exploratory Analysis
+
+doc_term <- dim(dtm)
+
+# number of docs
+docs <- nrow(dtm)
+terms <- ncol(dtm)
+
+# 1-gram freq table
+
+
+# 2-gram freq table
+
 
 # create TDM
-dtm <- DocumentTermMatrix(clean_corp)
 
 # explore TDM
 
