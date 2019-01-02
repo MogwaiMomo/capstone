@@ -1,11 +1,11 @@
 # get data from URL into list of files
-url <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
-destfile <- "./input/capstone-data.zip"
-
-download.file(url, destfile)
-unzip(destfile, exdir ="./input/")
-#remove zip file
-file.remove(destfile)
+  # url <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
+  # destfile <- "./input/capstone-data.zip"
+# 
+  # download.file(url, destfile)
+  # unzip(destfile, exdir ="./input/")
+# #remove zip file
+  # file.remove(destfile)
 # create paths to each data file
 file_dir <- paste(getwd(),"input/final/en_US", sep="/")
 files <- list.files(file_dir, full.names = TRUE)
