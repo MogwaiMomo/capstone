@@ -23,7 +23,8 @@ dtm <- CreateDtm(training_data$text,
                 ngram_window = c(1, 3),
                 lower = TRUE,
                 remove_punctuation = TRUE,
-                remove_numbers = TRUE
+                remove_numbers = TRUE,
+                stopword_vec = NULL # don't remove stopwords!
                 #stem_lemma_function = wordStem
 )
 
@@ -33,15 +34,23 @@ doc_term <- dim(dtm)
 
 # number of docs
 docs <- nrow(dtm)
+# number of terms
 terms <- ncol(dtm)
 
-# 1-gram freq table
+# get term frequency for the dtm
+tf_matrix <- TermDocFreq(dtm = dtm)
+tf_matrix <- tf_matrix[order(tf_matrix$term_freq, decreasing = TRUE), ]
 
+# 1-gram freq table
+tf_monograms <- tf_matrix %>%
+  filter(!grepl("_", term))
 
 # 2-gram freq table
-
+tf_bigrams <- tf_matrix %>%
+  filter(grepl("_", term))
 
 # create TDM
+
 
 # explore TDM
 

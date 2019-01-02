@@ -3,7 +3,6 @@ options(stringsAsFactors = FALSE)
 setwd(dirname(parent.frame(2)$ofile))
 
 # load libraries
-library(tm)
 library(RCurl)
 library(tidyverse)
 library(tidytext)
