@@ -41,20 +41,18 @@ terms <- ncol(dtm)
 tf_matrix <- TermDocFreq(dtm = dtm)
 tf_matrix <- tf_matrix[order(tf_matrix$term_freq, decreasing = TRUE), ]
 
-# 1-gram freq table
+# monogram freq table
 tf_monograms <- tf_matrix %>%
   filter(!grepl("_", term))
 
-# 2-gram freq table
+# bigram freq table
 tf_bigrams <- tf_matrix %>%
-  filter(grepl("_", term))
+  filter(grepl("_", term)) %>%
+  filter(!grepl("_.+_", term))
 
-# create TDM
-
-
-# explore TDM
-
-
+# trigram freq table
+tf_trigrams <- tf_matrix %>%
+  filter(grepl("_.+_", term))
 
 # Build the state pairs
 
