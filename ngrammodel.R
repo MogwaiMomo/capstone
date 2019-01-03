@@ -6,7 +6,7 @@
 
 # Training data: 
 
-training_data <- blog.docs %>%
+training_data <- blog.docs %>% # NOT lemmatized
   select(doc_id = line, text)
 
 
@@ -37,13 +37,18 @@ docs <- nrow(dtm)
 # number of terms
 terms <- ncol(dtm)
 
+
+
 # get term frequency for the dtm
 tf_matrix <- TermDocFreq(dtm = dtm)
 tf_matrix <- tf_matrix[order(tf_matrix$term_freq, decreasing = TRUE), ]
 
-# monogram freq table
-tf_monograms <- tf_matrix %>%
-  filter(!grepl("_", term))
+# general term freq table
+
+tf_terms <- tf_matrix %>%
+  filter(!grepl("_", term)) %>%
+  mutate(p_initial = term_freq / sum(term_freq))
+  
 
 # bigram freq table
 tf_bigrams <- tf_matrix %>%
@@ -54,9 +59,11 @@ tf_bigrams <- tf_matrix %>%
 tf_trigrams <- tf_matrix %>%
   filter(grepl("_.+_", term))
 
-# Build the state pairs
+# Build the state pairs 
 
-# initial word 
+
+
+
 
 # first word (no prev2 word) 
 
