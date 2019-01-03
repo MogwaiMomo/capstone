@@ -20,7 +20,7 @@ library(textmineR)
 # create dtm
 dtm <- CreateDtm(training_data$text,
                 doc_names = training_data$doc_id,
-                ngram_window = c(1, 3),
+                ngram_window = c(1, 2),
                 lower = TRUE,
                 remove_punctuation = TRUE,
                 remove_numbers = TRUE,
@@ -47,8 +47,21 @@ tf_matrix <- tf_matrix[order(tf_matrix$term_freq, decreasing = TRUE), ]
 
 tf_terms <- tf_matrix %>%
   filter(!grepl("_", term)) %>%
-  mutate(p_initial = term_freq / sum(term_freq))
   
+  # prob of initial word
+  mutate(p_initial = term_freq / sum(term_freq))
+
+  # calculate prob of 2nd word as function of initial word
+
+  # p_second <- function (initial_word) {
+
+      # create df that filters for all bigrams that start with the initial word
+
+      # calculate p_bigram for that df
+
+      # choose the top 3 entries
+
+  # } 
 
 # bigram freq table
 tf_bigrams <- tf_matrix %>%
