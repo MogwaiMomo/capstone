@@ -51,17 +51,25 @@ tf_terms <- tf_matrix %>%
   # prob of initial word
   mutate(p_initial = term_freq / sum(term_freq))
 
-  # calculate prob of 2nd word as function of initial word
+# Create first-order (p1 x p2) transition matrix - not working yet, but close!
 
-  # p_second <- function (initial_word) {
+# UNCOMMENT TO DEBUG:
+# OG Reference: https://stats.stackexchange.com/questions/26722/calculate-transition-matrix-markov-in-r
 
-      # create df that filters for all bigrams that start with the initial word
+# Also look into: https://cran.r-project.org/web/packages/markovchain/markovchain.pdf
 
-      # calculate p_bigram for that df
 
-      # choose the top 3 entries
+# trans.matrix <- function(df, prob=T) {
+#   tt <- table( # create contingency table
+#     c(df[,-ncol(df)]), # remove last column - why?
+#     c(df[,-1]) # remove first column - why?
+#     )
+#   if(prob == T) {
+#     tt <- tt / rowSums(tt)
+#   }
+#   return(tt)
+# }
 
-  # } 
 
 # bigram freq table
 tf_bigrams <- tf_matrix %>%
@@ -72,20 +80,6 @@ tf_bigrams <- tf_matrix %>%
 tf_trigrams <- tf_matrix %>%
   filter(grepl("_.+_", term))
 
-# Build the state pairs 
-
-
-
-
-
-# first word (no prev2 word) 
-
-# second-order probabilities
-
-# 'END' pair for end of sentences
-
-# Do simple counts and calculate probabilities 
-# (i.e. create a transition matrix)
 
 
 # Will use 10-fold cross validation for test-error estimation. Train the data on the blog text. (Look into Caret package and 'cv' options for this.)
