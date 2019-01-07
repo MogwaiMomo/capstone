@@ -37,22 +37,33 @@ docs <- nrow(dtm)
 # number of terms
 terms <- ncol(dtm)
 
-
-
 # get term frequency for the dtm
 tf_matrix <- TermDocFreq(dtm = dtm)
 tf_matrix <- tf_matrix[order(tf_matrix$term_freq, decreasing = TRUE), ]
 
-# general term freq table
-tf_terms <- tf_matrix %>%
-  filter(!grepl("_", term)) %>%
-  
-  # prob of initial word
-  mutate(p_initial = term_freq / sum(term_freq)) #%>%
+# calculate n-gram probabilities
 
-  # prob of second word
-  # 
+# reference: 
+# https://youtu.be/w4utWoJfxGE?t=269
+
+# unigram freq table
+tf_unigrams <- tf_matrix %>%
+  filter(!grepl("_", term)) %>%
+  select(term, term_freq) %>%
+  rename(unigram = term, unigram_count = term_freq)
   
+# bigram freq table
+tf_bigrams <- tf_matrix %>%
+  filter(grepl("_", term)) %>%
+  filter(!grepl("_.+_", term)) %>%
+  select(term, term_freq) %>%
+  rename(bigram = term, bigram_count = term_freq) %>%
+  # add column of what the first word is
+  mutate(first_word = gsub)
+  # add column of count of first word (grab from unigram list)
+
+
+
 
 # Create first-order (p1 x p2) transition matrix - not working yet, but close!
 
@@ -61,6 +72,7 @@ tf_terms <- tf_matrix %>%
 
 # Also look into: https://cran.r-project.org/web/packages/markovchain/markovchain.pdf
 
+test_matrix <- matrix()
 
 trans.matrix <- function(df, prob=T) {
   tt <- table( # create contingency table
@@ -73,15 +85,6 @@ trans.matrix <- function(df, prob=T) {
   return(tt)
 }
 
-
-# bigram freq table
-tf_bigrams <- tf_matrix %>%
-  filter(grepl("_", term)) %>%
-  filter(!grepl("_.+_", term))
-
-# trigram freq table
-tf_trigrams <- tf_matrix %>%
-  filter(grepl("_.+_", term))
 
 
 
