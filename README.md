@@ -1,12 +1,18 @@
 # TO DO LIST - WEEK 2
 
-20190107: Create a basic n-gram model to predict the next word after 1, 2, or 3 words. 
+20190107: Create a basic n-gram model to predict the next word after 1, 2, or 3 words: 
+
+Review language modeling overview and other 
+https://www.youtube.com/watch?v=dkUtavsPqNA&index=12&list=PL3CEFE83D76F8B515
+
+
+
+
+At some point, also try: 
 
 https://medium.com/ymedialabs-innovation/next-word-prediction-using-markov-model-570fc0475f96
 
 https://cran.r-project.org/web/packages/markovchain/vignettes/markovchainCrashIntro.pdf
-
-At some point, also try: 
 
 1. play around with tf-idf to find important words in different documents (try doing blog vs twitter vs news)
 

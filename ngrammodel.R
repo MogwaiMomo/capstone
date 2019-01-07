@@ -48,9 +48,10 @@ tf_terms <- tf_matrix %>%
   filter(!grepl("_", term)) %>%
   
   # prob of initial word
-  mutate(p_initial = term_freq / sum(term_freq))
+  mutate(p_initial = term_freq / sum(term_freq)) #%>%
 
   # prob of second word
+  # 
   
 
 # Create first-order (p1 x p2) transition matrix - not working yet, but close!
