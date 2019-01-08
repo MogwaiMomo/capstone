@@ -1,6 +1,6 @@
 # TO DO LIST - WEEK 2
 
-20190108: Create a basic n-gram model to predict the next word after 1, 2, or 3 words: 
+20190108: Create a basic n-gram model to predict the next word after 1, 2, or 3 words 
 
 Today: Create a bigram transition matrix
 

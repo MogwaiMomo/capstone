@@ -59,31 +59,22 @@ tf_bigrams <- tf_matrix %>%
   select(term, term_freq) %>%
   rename(bigram = term, bigram_count = term_freq) %>%
   # add column of what the first word is
-  mutate(first_word = gsub)
-  # add column of count of first word (grab from unigram list)
+  mutate(tmp = bigram) %>%
+  separate(tmp, c("unigram", "unigram2"))
 
-
+# add column of count of first word (grab from unigram list)
+tf_bigrams <- left_join(tf_bigrams, tf_unigrams, by = "unigram")
+tf_transprob <- tf_bigrams %>%
+  # remember: bigram prob = P(w2|w1) = 
+  mutate(bigram_prob = bigram_count / unigram_count) 
+  
 
 
 # Create first-order (p1 x p2) transition matrix - not working yet, but close!
 
-# UNCOMMENT TO DEBUG:
-# OG Reference: https://stats.stackexchange.com/questions/26722/calculate-transition-matrix-markov-in-r
-
 # Also look into: https://cran.r-project.org/web/packages/markovchain/markovchain.pdf
 
-test_matrix <- matrix()
 
-trans.matrix <- function(df, prob=T) {
-  tt <- table( # create contingency table
-    c(df[,-ncol(df)]), # remove last column
-    c(df[,-1]) # remove first column
-    )
-  if(prob == T) {
-    tt <- tt / rowSums(tt)
-  }
-  return(tt)
-}
 
 
 
