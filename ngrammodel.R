@@ -68,9 +68,12 @@ tf_transprob <- tf_bigrams %>%
   # remember: bigram prob = P(w2|w1) = 
   mutate(bigram_prob = bigram_count / unigram_count) 
   
-
-
-# Create first-order (p1 x p2) transition matrix - not working yet, but close!
+# recast bigram probs into a transition matrix
+transmatrix_df <- data.frame(
+  w1 = tf_transprob$unigram,
+  w2 =  tf_transprob$unigram2,
+  prob = tf_transprob$bigram_prob
+) 
 
 # Also look into: https://cran.r-project.org/web/packages/markovchain/markovchain.pdf
 
