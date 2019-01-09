@@ -68,14 +68,17 @@ tf_transprob <- tf_bigrams %>%
   # remember: bigram prob = P(w2|w1) = 
   mutate(bigram_prob = bigram_count / unigram_count) 
   
-# recast bigram probs into a transition matrix
-transprob_df <- data.frame(
+
+bigram_model <- data.frame(
   w1 = tf_transprob$unigram,
   w2 =  tf_transprob$unigram2,
   prob = tf_transprob$bigram_prob
 ) %>%
   group_by(w1) %>%
   arrange(desc(prob), .by_group = TRUE)
+
+
+# test Markov model
 
 
 
