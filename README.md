@@ -1,8 +1,9 @@
 # TO DO LIST - WEEK 2
 
-20190108: Create a basic n-gram model to predict the next word after 1, 2, or 3 words 
+20190109: Create a basic n-gram model to predict the next word after 1, 2, or 3 words 
 
-NEXT: Recast transprob_df into transition matrix
+Get some kind of markov chain prediction going ... 
+https://sookocheff.com/post/nlp/ngram-modeling-with-markov-chains/
 
 Review language modeling overview and other 
 https://www.youtube.com/watch?v=dkUtavsPqNA&index=12&list=PL3CEFE83D76F8B515
