@@ -14,8 +14,8 @@ training_data <- blog.docs %>% # NOT lemmatized
 
 #### N-GRAM MODEL FOR WORD PREDICTION
 
-train_model <- function(text_vector) {
-  dtm <- CreateDtm(text_vector,
+train_model <- function(df) {
+  dtm <- CreateDtm(df$text,
                    doc_names = training_data$doc_id,
                    ngram_window = c(1, 3),
                    lower = TRUE,
@@ -29,43 +29,33 @@ train_model <- function(text_vector) {
   tf_matrix <- TermDocFreq(dtm = dtm)
   tf_matrix <- tf_matrix[order(tf_matrix$term_freq, decreasing = TRUE),]
   
-}
+  # w1 freq table
+  w1_tf <- tf_matrix %>%
+    filter(!grepl("_", term)) %>%
+    select(w1 = term, w1_count = term_freq)
+
+  # w1_w2 freq table
+  w1_w2_tf <- tf_matrix %>%
+    filter(grepl("_", term)) %>%
+    filter(!grepl("_.+_", term)) %>%
+    select(term, term_freq) %>%
+    rename(w1_w2 = term, w1_w2_count = term_freq) %>%
+    # add column of what the first word is
+    mutate(tmp = w1_w2) %>%
+    separate(tmp, c("w1", "w2"))
   
-#   # w1 freq table
-#   w1_tf <- tf_matrix %>%
-#     filter(grepl("_", term)) %>%
-#     filter(!grepl("_.+_", term)) %>%
-#     select(term, term_freq)
-#   
-#   # w1_w2 freq table
-#   tf_bigrams <- tf_matrix %>%
-#     filter(grepl("_", term)) %>%
-#     filter(!grepl("_.+_", term)) %>%
-#     select(term, term_freq) %>%
-#     rename(bigram = term, bigram_count = term_freq) %>%
-#     # add column of what the first word is
-#     mutate(tmp = bigram) %>%
-#     separate(tmp, c("unigram", "unigram2"))
-#   
-#   # add column of count of first word (grab from unigram list)
-#   tf_bigrams <- left_join(tf_bigrams, tf_unigrams, by = "unigram")
-#   tf_transprob <- tf_bigrams %>%
-#     # remember: bigram prob = P(w2|w1)  
-#     mutate(bigram_prob = bigram_count / unigram_count)
-#   
-#   bigram_model <- data.frame(
-#     w1 = tf_transprob$unigram,
-#     w2 =  tf_transprob$unigram2,
-#     prob = tf_transprob$bigram_prob
-#   ) %>%
-#     group_by(w1) %>%
-#     arrange(desc(prob), .by_group = TRUE)
-#   rm(tf_transprob, tf_bigrams, dtm, tf_matrix)
-#   return(bigram_model)
-# }
-# 
-# trans_df <- train_model(training_data$text)
-# 
+    # add column of count of first word (grab from unigram list)
+    w1_w2_tf <- left_join(w1_w2_tf, w1_tf, by = "w1")
+    w1_w2_prob <- w1_w2_tf %>%
+      # remember: bigram prob = P(w2|w1)
+      mutate(trans_prob = w1_w2_count / w1_count) %>%
+        group_by(w1) %>%
+        arrange(desc(trans_prob), .by_group = TRUE)
+
+  return(w1_w2_prob)
+}
+
+test <- train_model(training_data)
 
 # test Markov model
 
