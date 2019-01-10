@@ -1,6 +1,6 @@
 # TO DO LIST - WEEK 2
 
-20190109: Create a basic n-gram model to predict the next word after 1, 2, or 3 words 
+20190110: Create a basic n-gram model to predict the next word after 1, 2, or 3 words 
 
 Get some kind of markov chain prediction going ... 
 https://sookocheff.com/post/nlp/ngram-modeling-with-markov-chains/

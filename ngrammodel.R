@@ -4,6 +4,7 @@
 # https://datawarrior.wordpress.com/2018/01/22/document-term-matrix-text-mining-in-r-and-python/
 # https://cran.r-project.org/web/packages/textmineR/vignettes/a_start_here.html
 # https://youtu.be/w4utWoJfxGE?t=269
+# https://github.com/ashwinmj/word-prediction/blob/master/MarkovModel.ipynb
 
 # load textmineR package
 library(textmineR)
