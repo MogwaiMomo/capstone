@@ -55,15 +55,30 @@ train_model <- function(df) {
   return(w1_w2_prob)
 }
 
-test <- train_model(training_data)
+model <- train_model(training_data)
 
-# test Markov model
+# 10-fold cross validation (Look into Caret package and 'cv' options for this.)
+
+# create test of Markov model
+
+test_model <- function(unigram, model) {
+  w <- as.character(unigram)
+  if (w %in% model$w1) {
+    next_w <- model %>%
+      filter(w == w1) %>%
+      select(w2, trans_prob) 
+    next_w 
+    print(next_w)
+  }
+  else {
+    print("Word not found.")
+  }
+}
 
 
 # Also look into: https://cran.r-project.org/web/packages/markovchain/markovchain.pdf
 
 
-# Will use 10-fold cross validation for test-error estimation. Train the data on the blog text. (Look into Caret package and 'cv' options for this.)
 
 
 # Build a model to handle unseen n-grams - in some cases people will want to type a combination of words that does not appear in the corpora. Build a model to handle cases where a particular n-gram isn't observed.
