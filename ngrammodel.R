@@ -67,7 +67,6 @@ test_model <- function(unigram, model) {
     next_w <- model %>%
       filter(w == w1) %>%
       select(w2, trans_prob) 
-    next_w 
     print(next_w)
   }
   else {

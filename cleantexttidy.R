@@ -10,6 +10,12 @@
 file_dir <- paste(getwd(),"input/final/en_US", sep="/")
 files <- list.files(file_dir, full.names = TRUE)
 
+# convert files to csv
+for (i in 1:length(files)) {
+  csv = read.table(file=files[i], sep = "\t")
+  write.csv(csv,file=paste0(sub(".txt","",files[i]),".csv"))
+}
+
 
 # get the number of lines in file
 getTotalLines <- function(file) {

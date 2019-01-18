@@ -2,7 +2,14 @@
 
 20190110: Create a basic n-gram model to predict the next word after 1, 2, or 3 words: 
 
-Next up: Write the test.
+Next up: Write the test: 
+
+  - convert txt files to csv - IN PROGRESS
+  - use LaF package to do random sampling of lines
+  - create 1 test set and 9 training sets
+  - get average trans probabilities from all 9 training sets
+  - create n-grams for test set and test
+  - get % accuracy of test
 
 Get some kind of markov chain prediction going ... 
 https://sookocheff.com/post/nlp/ngram-modeling-with-markov-chains/
@@ -11,7 +18,8 @@ Review language modeling overview and other
 https://www.youtube.com/watch?v=dkUtavsPqNA&index=12&list=PL3CEFE83D76F8B515
 
 
-
+Break down this code and figure out how caret fits in with markov modeling
+https://r-forge.r-project.org/scm/viewvc.php/*checkout*/www/custom_models.html?revision=847&root=caret
 
 
 At some point, also try: 

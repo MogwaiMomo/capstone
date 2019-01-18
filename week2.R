@@ -19,7 +19,7 @@ library(textstem)
 library(scales)
 library(wordnet)
 library(RDRPOSTagger)
-
+library(LaF)
 
 
 ### EXPLORATORY DATA ANALYSIS
