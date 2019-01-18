@@ -1,11 +1,15 @@
 # TO DO LIST - WEEK 2
 
-20190110: Create a basic n-gram model to predict the next word after 1, 2, or 3 words: 
+20190118: Create a basic n-gram model to predict the next word after 1, 2, or 3 words: 
 
 Next up: Write the test: 
 
-  - convert txt files to csv - IN PROGRESS
+  - convert txt files to csv - DONE
+  
   - use LaF package to do random sampling of lines
+  
+    - #### FIX GetRandomDataFast function in cleantidydata file ####
+    
   - create 1 test set and 9 training sets
   - get average trans probabilities from all 9 training sets
   - create n-grams for test set and test

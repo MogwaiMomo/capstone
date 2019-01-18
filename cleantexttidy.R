@@ -16,7 +16,6 @@ for (i in 1:length(files)) {
   write.csv(csv,file=paste0(sub(".txt","",files[i]),".csv"))
 }
 
-
 # get the number of lines in file
 getTotalLines <- function(file) {
   com <- paste0("wc -l ", file, " | awk '{ print $1 }'")
@@ -42,11 +41,33 @@ getData <- function(file) {
   return(lines)
 }
 
+# faster, randomized version of getData using LaF
+# getRandomDataFast <- function(file) {
+#   nlines <- getTotalLines(file)
+#   # uncomment line 35 if you want only a small sample of lines
+#   n <- nlines*0.01
+#   # open file connection
+#   con <- file(file, open="r")
+#   # read in all lines
+#   lines <- sample_lines(file, n, nlines = nlines)
+#   names(lines) <- c("text")
+#   #close connection
+#   close(con)
+#   lines$line = seq(1, nrow(lines), 1)
+#   lines <- lines %>% select(line, text)
+#   return(lines)
+# }
 
 # create line dfs with word counts
 raw.blog.df <- getData(files[1])
 raw.news.df <- getData(files[2])
 raw.twitter.df <- getData(files[3])
+
+
+# create line dfs with word counts
+# fast.blog.df <- getRandomDataFast(files[1])
+# fast.news.df <- getRandomDataFast(files[2])
+# fast.twitter.df <- getRandomDataFast(files[3])
 
 # lemmatize documents
 lemma.blog.df <- data_frame(
