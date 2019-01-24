@@ -50,12 +50,11 @@ getTotalLines <- function(file) {
 # }
 
 
-
 # faster, randomized version of getData using LaF
 getRandomDataFast <- function(file) {
   nlines <- getTotalLines(file)
   # uncomment line 35 if you want only a small sample of lines
-  n <- as.integer(nlines*0.01)
+  n <- as.integer(nlines*0.1111111)
   # read in all lines
   lines <- as.data.frame(sample_lines(file, n, nlines = nlines))
   names(lines) <- c("text")
@@ -64,10 +63,25 @@ getRandomDataFast <- function(file) {
   return(lines)
 }
 
+createTrainingData <- function(file) {
+  training.dfs <- list()
+  for (i in 1:9) {
+    df <- getRandomDataFast(file)
+    item <- paste("training", i, sep="_")
+    training.dfs[[item]] <- df
+  }
+  return(training.dfs)
+} 
+
+
+trainingDatasets <- createTrainingData(files[4])
+testDatasets <- getRandomDataFast(files[4])
+
+
 # create line dfs with word counts
-fast.blog.df <- getRandomDataFast(files[4])
-fast.news.df <- getRandomDataFast(files[5])
-fast.twitter.df <- getRandomDataFast(files[6])
+# fast.blog.df <- getRandomDataFast(files[4])
+# fast.news.df <- getRandomDataFast(files[5])
+# fast.twitter.df <- getRandomDataFast(files[6])
 
 # create line dfs with word counts
 # raw.blog.df <- getData(files[1])

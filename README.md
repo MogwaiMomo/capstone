@@ -6,8 +6,9 @@ Next up: Write the test:
 
   - convert txt files to csv - DONE
   - use LaF package to do random sampling of lines - DONE
-
-  - create 1 test set and 9 training sets
+  - create 9 training sets - DONE
+  - create 1 test set - DONE
+  
   - get average trans probabilities from all 9 training sets
   - create n-grams for test set and test
   - get % accuracy of test
