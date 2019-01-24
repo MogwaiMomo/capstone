@@ -49,37 +49,31 @@ getTotalLines <- function(file) {
 #   return(lines)
 # }
 
-nlines <- getTotalLines(files[4])
-# uncomment line 35 if you want only a small sample of lines
-n <- as.integer(nlines*0.01)
-# open file connection
-con <- file(files[4], open="r")
-# read in all lines
-lines <- as.data.frame(sample_lines(files[4], n, nlines = nlines))
-names(lines) <- c("text")
-#close connection
-close(con)
-lines$line = seq(1, nrow(lines), 1)
-lines <- lines %>% select(line, text)
-return(lines)
-
 
 
 # faster, randomized version of getData using LaF
-# getRandomDataFast <- function(file) {
-# 
-# }
+getRandomDataFast <- function(file) {
+  nlines <- getTotalLines(file)
+  # uncomment line 35 if you want only a small sample of lines
+  n <- as.integer(nlines*0.01)
+  # read in all lines
+  lines <- as.data.frame(sample_lines(file, n, nlines = nlines))
+  names(lines) <- c("text")
+  lines$line = seq(1, nrow(lines), 1)
+  lines <- lines %>% select(line, text)
+  return(lines)
+}
+
+# create line dfs with word counts
+fast.blog.df <- getRandomDataFast(files[4])
+fast.news.df <- getRandomDataFast(files[5])
+fast.twitter.df <- getRandomDataFast(files[6])
 
 # create line dfs with word counts
 # raw.blog.df <- getData(files[1])
 # raw.news.df <- getData(files[2])
 # raw.twitter.df <- getData(files[3])
 
-
-# create line dfs with word counts
-fast.blog.df <- getRandomDataFast(files[1])
-# fast.news.df <- getRandomDataFast(files[2])
-# fast.twitter.df <- getRandomDataFast(files[3])
 
 # # lemmatize documents
 # lemma.blog.df <- data_frame(
