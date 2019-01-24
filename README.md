@@ -7,7 +7,7 @@ Next up: Write the test:
   - convert txt files to csv - DONE
   
   - use LaF package to do random sampling of lines
-  
+
     - #### FIX GetRandomDataFast function in cleantidydata file ####
     
   - create 1 test set and 9 training sets
