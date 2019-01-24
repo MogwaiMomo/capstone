@@ -16,13 +16,13 @@ for (i in 1:length(files)) {
   }
 }
 
-
-
 # convert files to csv
 for (i in 1:length(files)) {
   csv = read.table(file=files[i], sep = "\t")
   write.csv(csv,file=paste0(sub(".txt","",files[i]),".csv"))
 }
+
+files <- list.files(file_dir, full.names = TRUE)
 
 # get the number of lines in file
 getTotalLines <- function(file) {
@@ -32,35 +32,35 @@ getTotalLines <- function(file) {
 }
 
 # read in text from files
-getData <- function(file) {
-  # get the number of lines in file
-  n <- getTotalLines(file)
-  # uncomment line 35 if you want only a small sample of lines
-  n <- n*0.01
-  # open file connection
-  con <- file(file, open="r")
-  # read in all lines
-  lines <- as.data.frame(readLines(con, n, warn = FALSE))
-  names(lines) <- c("text")
-  #close connection
-  close(con)
-  lines$line = seq(1, nrow(lines), 1)
-  lines <- lines %>% select(line, text)
-  return(lines)
-}
+# getData <- function(file) {
+#   # get the number of lines in file
+#   n <- getTotalLines(file)
+#   # uncomment line 35 if you want only a small sample of lines
+#   n <- n*0.01
+#   # open file connection
+#   con <- file(file, open="r")
+#   # read in all lines
+#   lines <- as.data.frame(readLines(con, n, warn = FALSE))
+#   names(lines) <- c("text")
+#   #close connection
+#   close(con)
+#   lines$line = seq(1, nrow(lines), 1)
+#   lines <- lines %>% select(line, text)
+#   return(lines)
+# }
 
-nlines <- getTotalLines(file)
+nlines <- getTotalLines(files[4])
 # uncomment line 35 if you want only a small sample of lines
-n <- nlines*0.01
+n <- as.integer(nlines*0.01)
 # open file connection
-con <- file(file, open="r")
+con <- file(files[4], open="r")
 # read in all lines
-lines <- sample_lines(file, n, nlines = nlines)
+lines <- as.data.frame(sample_lines(files[4], n, nlines = nlines))
 names(lines) <- c("text")
 #close connection
 close(con)
-#lines$line = seq(1, nrow(lines), 1)
-#lines <- lines %>% select(line, text)
+lines$line = seq(1, nrow(lines), 1)
+lines <- lines %>% select(line, text)
 return(lines)
 
 
