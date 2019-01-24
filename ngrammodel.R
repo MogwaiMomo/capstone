@@ -9,8 +9,11 @@
 # load textmineR package
 library(textmineR)
 
-training_data <- blog.docs %>% # NOT lemmatized
+training_data <- blog.docs %>%
   select(doc_id = line, text)
+
+
+
 
 #### N-GRAM MODEL FOR WORD PREDICTION
 
@@ -57,7 +60,12 @@ train_model <- function(df) {
 
 model <- train_model(training_data)
 
-# 10-fold cross validation (Look into Caret package and 'cv' options for this.)
+# 10-fold cross validation
+
+
+
+
+
 
 # create test of Markov model
 
