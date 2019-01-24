@@ -9,6 +9,14 @@
 # create paths to each data file
 file_dir <- paste(getwd(),"input/final/en_US", sep="/")
 files <- list.files(file_dir, full.names = TRUE)
+# delete all csvs
+for (i in 1:length(files)) {
+  if (grepl(".csv", files[[i]])) {
+    file.remove(files[[i]])
+  }
+}
+
+
 
 # convert files to csv
 for (i in 1:length(files)) {
@@ -41,22 +49,26 @@ getData <- function(file) {
   return(lines)
 }
 
+nlines <- getTotalLines(file)
+# uncomment line 35 if you want only a small sample of lines
+n <- nlines*0.01
+# open file connection
+con <- file(file, open="r")
+# read in all lines
+lines <- sample_lines(file, n, nlines = nlines)
+names(lines) <- c("text")
+#close connection
+close(con)
+#lines$line = seq(1, nrow(lines), 1)
+#lines <- lines %>% select(line, text)
+return(lines)
+
+
+
 # faster, randomized version of getData using LaF
-getRandomDataFast <- function(file) {
-  nlines <- getTotalLines(file)
-  # uncomment line 35 if you want only a small sample of lines
-  n <- nlines*0.01
-  # open file connection
-  con <- file(file, open="r")
-  # read in all lines
-  lines <- sample_lines(file, n, nlines = nlines)
-  names(lines) <- c("text")
-  #close connection
-  close(con)
-  #lines$line = seq(1, nrow(lines), 1)
-  #lines <- lines %>% select(line, text)
-  return(lines)
-}
+# getRandomDataFast <- function(file) {
+# 
+# }
 
 # create line dfs with word counts
 # raw.blog.df <- getData(files[1])
