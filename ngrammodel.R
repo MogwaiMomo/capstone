@@ -9,10 +9,8 @@
 # load textmineR package
 library(textmineR)
 
-training_data <- blog.docs %>%
-  select(doc_id = line, text)
-
-
+trainingDatasets <- createTrainingData(files[4])
+testDataset <- getRandomDataFast(files[4])
 
 
 #### N-GRAM MODEL FOR WORD PREDICTION
@@ -58,13 +56,7 @@ train_model <- function(df) {
   return(w1_w2_prob)
 }
 
-model <- train_model(training_data)
-
-# 10-fold cross validation
-
-
-
-
+model <- train_model(testDataset)
 
 
 # create test of Markov model
