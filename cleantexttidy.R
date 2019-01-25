@@ -36,52 +36,45 @@ getTotalLines <- function(file) {
 ##### NON RANDOM DATA ######
 
 # read in text from files
-getData <- function(file) {
-  # get the number of lines in file
-  n <- getTotalLines(file)
+getData <- function(file, random = F) {
+  
+  nlines <- getTotalLines(file)
   # uncomment line 35 if you want only a small sample of lines
-  n <- n*0.01
-  # open file connection
-  con <- file(file, open="r")
-  # read in all lines
-  lines <- as.data.frame(readLines(con, n, warn = FALSE))
-  names(lines) <- c("text")
-  #close connection
-  close(con)
-  lines$doc_id = seq(1, nrow(lines), 1)
-  lines <- lines %>% select(doc_id, text)
-  return(lines)
+  n <- as.integer(nlines*0.01111)
+  
+  if (random) {
+    # read in all lines
+    lines <- as.data.frame(sample_lines(file, n, nlines = nlines))
+    names(lines) <- c("text")
+  } else {
+    # open file connection
+    con <- file(file, open="r")
+    # read in all lines
+    lines <- as.data.frame(readLines(con, n, warn = FALSE))
+    names(lines) <- c("text")
+    #close connection
+    close(con)
+  }
+    lines$doc_id = seq(1, nrow(lines), 1)
+    lines <- lines %>% select(doc_id, text)
+    return(lines)
 }
 
-# create line dfs
-raw.blog.df <- getData(files[2])
-raw.news.df <- getData(files[4])
-raw.twitter.df <- getData(files[6])
+##### READLINES VERSION #########
 
-###########################
+# raw.blog.df <- getData(files[2], random = F)
+# raw.news.df <- getData(files[4], random = F)
+# raw.twitter.df <- getData(files[6], random = F)
 
-##### RANDOM DATA #########
+#################################
 
-# # randomized version of getData using LaF
-# getRandomData <- function(file) {
-#   nlines <- getTotalLines(file)
-#   # uncomment line 35 if you want only a small sample of lines
-#   n <- as.integer(nlines*0.01111)
-#   # read in all lines
-#   lines <- as.data.frame(sample_lines(file, n, nlines = nlines))
-#   names(lines) <- c("text")
-#   lines$doc_id = seq(1, nrow(lines), 1)
-#   lines <- lines %>% select(doc_id, text)
-#   return(lines)
-# }
-# 
-# # create line dfs
-# raw.blog.df <- getRandomData(files[1])
-# raw.news.df <- getRandomData(files[3])
-# raw.twitter.df <- getRandomData(files[5])
+##### SAMPLELINES VERSION #######
 
-###########################
+raw.blog.df <- getData(files[1], random = T)
+raw.news.df <- getData(files[3], random = T)
+raw.twitter.df <- getData(files[5], random = T)
 
+#################################
 
 
 

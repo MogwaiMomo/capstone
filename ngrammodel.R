@@ -12,15 +12,15 @@ library(textmineR)
 createTrainingData <- function(file) {
   training.dfs <- list()
   for (i in 1:9) {
-    df <- getRandomData(file)
+    df <- getData(file)
     item <- paste("training", i, sep="_")
     training.dfs[[item]] <- df
   }
   return(training.dfs)
 } 
 
-trainingDatasets <- createTrainingData(files[1])
-testDataset <- getRandomData(files[1])
+trainingDatasets <- createTrainingData(files[2])
+testDataset <- getData(files[2])
 
 
 #### N-GRAM MODEL FOR WORD PREDICTION
@@ -86,8 +86,5 @@ test_model <- function(unigram, model) {
 
 
 # Also look into: https://cran.r-project.org/web/packages/markovchain/markovchain.pdf
-
-
-
 
 # Build a model to handle unseen n-grams - in some cases people will want to type a combination of words that does not appear in the corpora. Build a model to handle cases where a particular n-gram isn't observed.
