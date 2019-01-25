@@ -9,6 +9,16 @@
 # load textmineR package
 library(textmineR)
 
+createTrainingData <- function(file) {
+  training.dfs <- list()
+  for (i in 1:9) {
+    df <- getRandomDataFast(file)
+    item <- paste("training", i, sep="_")
+    training.dfs[[item]] <- df
+  }
+  return(training.dfs)
+} 
+
 trainingDatasets <- createTrainingData(files[4])
 testDataset <- getRandomDataFast(files[4])
 
