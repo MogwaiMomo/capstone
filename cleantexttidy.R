@@ -16,6 +16,8 @@ for (i in 1:length(files)) {
   }
 }
 
+files <- list.files(file_dir, full.names = TRUE)
+
 # convert files to csv
 for (i in 1:length(files)) {
   csv = read.table(file=files[i], sep = "\t")
