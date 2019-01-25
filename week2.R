@@ -133,9 +133,6 @@ source('cleantexttidy.R')
 
 source("ngrammodel.R")
 
-# 
-# 
-# 
 # # Questions to consider
 # # 
 # # How can you efficiently store an n-gram model (think Markov Chains)?

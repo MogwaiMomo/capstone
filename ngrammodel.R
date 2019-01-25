@@ -12,22 +12,22 @@ library(textmineR)
 createTrainingData <- function(file) {
   training.dfs <- list()
   for (i in 1:9) {
-    df <- getRandomDataFast(file)
+    df <- getRandomData(file)
     item <- paste("training", i, sep="_")
     training.dfs[[item]] <- df
   }
   return(training.dfs)
 } 
 
-trainingDatasets <- createTrainingData(files[4])
-testDataset <- getRandomDataFast(files[4])
+trainingDatasets <- createTrainingData(files[1])
+testDataset <- getRandomData(files[1])
 
 
 #### N-GRAM MODEL FOR WORD PREDICTION
 
 train_model <- function(df) {
   dtm <- CreateDtm(df$text,
-                   doc_names = training_data$doc_id,
+                   doc_names = df$doc_id,
                    ngram_window = c(1, 3),
                    lower = TRUE,
                    remove_punctuation = TRUE,

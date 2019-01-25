@@ -1,15 +1,15 @@
 # get data from URL into list of files
-  # url <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
-  # destfile <- "./input/capstone-data.zip"
-# 
-  # download.file(url, destfile)
-  # unzip(destfile, exdir ="./input/")
-# #remove zip file
-  # file.remove(destfile)
+url <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
+destfile <- "./input/capstone-data.zip"
+
+download.file(url, destfile)
+unzip(destfile, exdir ="./input/")
+#remove zip file
+file.remove(destfile)
 # create paths to each data file
 file_dir <- paste(getwd(),"input/final/en_US", sep="/")
 files <- list.files(file_dir, full.names = TRUE)
-# delete all csvs
+# delete all csvs, if they exist
 for (i in 1:length(files)) {
   if (grepl(".csv", files[[i]])) {
     file.remove(files[[i]])
@@ -33,11 +33,13 @@ getTotalLines <- function(file) {
   return(n)    
 }
 
-# faster, randomized version of getData using LaF
-getData <- function(file) {
+
+
+# randomized version of getData using LaF
+getRandomData <- function(file) {
   nlines <- getTotalLines(file)
   # uncomment line 35 if you want only a small sample of lines
-  n <- as.integer(nlines*0.0011111)
+  n <- as.integer(nlines*0.01111)
   # read in all lines
   lines <- as.data.frame(sample_lines(file, n, nlines = nlines))
   names(lines) <- c("text")
@@ -47,16 +49,10 @@ getData <- function(file) {
 }
 
 
-# create line dfs with word counts
-raw.blog.df <- getData(files[4])
-raw.news.df <- getData(files[5])
-raw.twitter.df <- getData(files[6])
-
-# create line dfs with word counts
-# raw.blog.df <- getData(files[1])
-# raw.news.df <- getData(files[2])
-# raw.twitter.df <- getData(files[3])
-
+# create line dfs
+raw.blog.df <- getRandomData(files[1])
+raw.news.df <- getRandomData(files[3])
+raw.twitter.df <- getRandomData(files[5])
 
 # lemmatize documents
 lemma.blog.df <- data_frame(
@@ -111,13 +107,13 @@ reduce_paste <- function(v) {
 }
 
 clean.blog.df <- tidy.blog %>%
-  group_by(line) %>%
+  group_by(doc_id) %>%
   summarise(text = reduce_paste(word))
 
 clean.news.df <- tidy.news %>%
-  group_by(line) %>%
+  group_by(doc_id) %>%
   summarise(text = reduce_paste(word))
 
 clean.twitter.df <- tidy.twitter %>%
-  group_by(line) %>%
+  group_by(doc_id) %>%
   summarise(text = reduce_paste(word))
