@@ -33,26 +33,57 @@ getTotalLines <- function(file) {
   return(n)    
 }
 
+##### NON RANDOM DATA ######
 
-
-# randomized version of getData using LaF
-getRandomData <- function(file) {
-  nlines <- getTotalLines(file)
+# read in text from files
+getData <- function(file) {
+  # get the number of lines in file
+  n <- getTotalLines(file)
   # uncomment line 35 if you want only a small sample of lines
-  n <- as.integer(nlines*0.01111)
+  n <- n*0.01
+  # open file connection
+  con <- file(file, open="r")
   # read in all lines
-  lines <- as.data.frame(sample_lines(file, n, nlines = nlines))
+  lines <- as.data.frame(readLines(con, n, warn = FALSE))
   names(lines) <- c("text")
+  #close connection
+  close(con)
   lines$doc_id = seq(1, nrow(lines), 1)
   lines <- lines %>% select(doc_id, text)
   return(lines)
 }
 
-
 # create line dfs
-raw.blog.df <- getRandomData(files[1])
-raw.news.df <- getRandomData(files[3])
-raw.twitter.df <- getRandomData(files[5])
+raw.blog.df <- getData(files[2])
+raw.news.df <- getData(files[4])
+raw.twitter.df <- getData(files[6])
+
+###########################
+
+##### RANDOM DATA #########
+
+# # randomized version of getData using LaF
+# getRandomData <- function(file) {
+#   nlines <- getTotalLines(file)
+#   # uncomment line 35 if you want only a small sample of lines
+#   n <- as.integer(nlines*0.01111)
+#   # read in all lines
+#   lines <- as.data.frame(sample_lines(file, n, nlines = nlines))
+#   names(lines) <- c("text")
+#   lines$doc_id = seq(1, nrow(lines), 1)
+#   lines <- lines %>% select(doc_id, text)
+#   return(lines)
+# }
+# 
+# # create line dfs
+# raw.blog.df <- getRandomData(files[1])
+# raw.news.df <- getRandomData(files[3])
+# raw.twitter.df <- getRandomData(files[5])
+
+###########################
+
+
+
 
 # lemmatize documents
 lemma.blog.df <- data_frame(
