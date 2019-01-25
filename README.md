@@ -1,6 +1,6 @@
 # TO DO LIST - WEEK 2
 
-20190118: Create a basic n-gram model to predict the next word after 1, 2, or 3 words: 
+2019025: Create a basic n-gram model to predict the next word after 1, 2, or 3 words: 
 
 Next up: Write the test: 
 
@@ -10,6 +10,7 @@ Next up: Write the test:
   - create 1 test set - DONE
   
   - get average trans probabilities from all 9 training sets
+  
   - create n-grams for test set and test
   - get % accuracy of test
 
