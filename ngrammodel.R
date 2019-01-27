@@ -12,7 +12,7 @@ library(textmineR)
 createTrainingData <- function(file) {
   training.dfs <- list()
   for (i in 1:9) {
-    df <- getData(file)
+    df <- getData(file, random = T)
     item <- paste("training", i, sep="_")
     training.dfs[[item]] <- df
   }
@@ -66,7 +66,12 @@ train_model <- function(df) {
   return(w1_w2_prob)
 }
 
-model <- train_model(testDataset)
+for (i in 1:length(trainingDatasets)) {
+  var <- paste0("training_", i)
+  model <- train_model(trainingDatasets[[i]])
+  assign(var, model)
+}
+
 
 
 # create test of Markov model
