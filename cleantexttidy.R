@@ -1,5 +1,6 @@
 # get data from URL into list of files
 url <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
+
 destfile <- "./input/capstone-data.zip"
 
 download.file(url, destfile)
@@ -21,7 +22,7 @@ files <- list.files(file_dir, full.names = TRUE)
 # convert files to csv
 for (i in 1:length(files)) {
   csv = read.table(file=files[i], sep = "\t")
-  write.csv(csv,file=paste0(sub(".txt","",files[i]),".csv"))
+  write.csv(csv,file=paste0(sub(".txt","",files[i]),".csv"), row.names = FALSE)
 }
 
 files <- list.files(file_dir, full.names = TRUE)
