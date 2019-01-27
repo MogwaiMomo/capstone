@@ -9,11 +9,8 @@ Next up: Write the test:
   - create 9 training sets - DONE
   - create 1 test set - DONE
   
-  
-  #### TO DO: FIX GENERATION OF WEIRD NUMBERS & QUOTES IN CSVS ####
-  
-  
   - get average trans probabilities from all 9 training sets
+  
   - create n-grams for test set and test
   - get % accuracy of test
 
