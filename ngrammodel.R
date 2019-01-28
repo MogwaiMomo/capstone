@@ -20,7 +20,7 @@ createTrainingData <- function(file) {
 } 
 
 trainingDatasets <- createTrainingData(files[2])
-testDataset <- getData(files[2])
+testDataset <- getData(files[2], random = T)
 
 
 #### N-GRAM MODEL FOR WORD PREDICTION
