@@ -61,7 +61,9 @@ train_model <- function(df) {
       # remember: bigram prob = P(w2|w1)
       mutate(trans_prob = w1_w2_count / w1_count) %>%
         group_by(w1) %>%
-        arrange(desc(trans_prob), .by_group = TRUE)
+        arrange(desc(trans_prob), .by_group = TRUE) %>%
+        ungroup() %>%
+        select(c("w1_w2", "trans_prob"))
 
   return(w1_w2_prob)
 }
