@@ -73,13 +73,14 @@ training_probs <- model
 for (i in 1:length(trainingDatasets)) {
   var <- paste0("training_", i)
   model <- train_model(trainingDatasets[[i]])
-  assign(var, model)
   
   # join tables for calculating averages
   if (i == 1) {
     training_probs <- model
+    assign(var, model)
   } else {
     full_join(training_probs, model, by = c("w1_w2"))
+    assign(var, model)
   }
 }
 
