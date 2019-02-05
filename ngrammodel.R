@@ -68,10 +68,13 @@ train_model <- function(df) {
   return(w1_w2_prob)
 }
 
-training_probs <- model
+training_probs_names <- character()
+training_probs_names[[1]] <- "bigram" 
+
 
 for (i in 1:length(trainingDatasets)) {
   var <- paste0("training_", i)
+  training_probs_names[[i+1]] <- var 
   model <- train_model(trainingDatasets[[i]])
   assign(var, model) 
   # join tables for calculating averages
@@ -82,6 +85,7 @@ for (i in 1:length(trainingDatasets)) {
     training_probs <- full_join(training_probs, model, by = c("w1_w2"))
   }
 }
+names(training_probs) <- training_probs_names
 
 
 
