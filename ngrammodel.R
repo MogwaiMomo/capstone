@@ -96,16 +96,29 @@ training_probs[is.na(training_probs <- training_probs)] <- 0
 final_model <- training_probs %>%
   mutate(mean=rowMeans(training_probs[,-1])) %>%
   separate(bigram, c("w1", "w2")) %>%
-  select(c(1,2,12))
+  select(c(1,2,12)) %>%
+  # keep only top 3
+  group_by(w1) %>%
+  top_n(3, mean)
 
-# create test of Markov model
+# create test of Markov model - create test n-grams
 
+test_words <- train_model(testDataset) %>%
+  separate(w1_w2, c("w1", "w2")) %>%
+  # keep only top 3
+  group_by(w1) %>%
+  top_n(3, trans_prob)
+
+
+
+
+# Get 
 test_model <- function(unigram, model) {
   w <- as.character(unigram)
   if (w %in% model$w1) {
     next_w <- model %>%
       filter(w == w1) %>%
-      select(w2, trans_prob) 
+      select(w2, mean)
     print(next_w)
   }
   else {
