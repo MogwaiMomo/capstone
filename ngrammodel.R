@@ -93,8 +93,10 @@ training_probs[is.na(training_probs <- training_probs)] <- 0
 
 # calculate averages of each bigram
 
-training_probs_means <- training_probs %>%
-  mutate(mean=rowMeans(training_probs[,-1]))
+final_model <- training_probs %>%
+  mutate(mean=rowMeans(training_probs[,-1])) %>%
+  separate(bigram, c("w1", "w2")) %>%
+  select(c(1,2,12))
 
 # create test of Markov model
 
