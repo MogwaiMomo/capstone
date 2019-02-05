@@ -1,6 +1,6 @@
 # TO DO LIST - WEEK 2
 
-2019028: Create a basic n-gram model to predict the next word after 1, 2, or 3 words: 
+20190205: Create a basic n-gram model to predict the next word after 1, 2, or 3 words: 
 
 Next up: Write the test: 
 
