@@ -87,8 +87,14 @@ for (i in 1:length(trainingDatasets)) {
 }
 names(training_probs) <- training_probs_names
 
+# replace NAs with zeros
 
+training_probs[is.na(training_probs <- training_probs)] <- 0
 
+# calculate averages of each bigram
+
+training_probs_means <- training_probs %>%
+  mutate(mean=rowMeans(training_probs[,-1]))
 
 # create test of Markov model
 
