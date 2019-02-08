@@ -12,9 +12,12 @@ Next up: Write the test:
   - create n-grams for test set  - DONE
   
   - test model with n-gram test set
-    - create list of unigrams
-  
-  - get % accuracy of test
+    - create list of unigrams - DONE
+    - cycle through unigrams and pull up table to next words - DONE
+    
+    - reduce output of cycle to just top next word (as character)
+    - calculate % coverage of test
+    - calculate % accuracy of test
 
 
 Get some kind of markov chain prediction going ... 
