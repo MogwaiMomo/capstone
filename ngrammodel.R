@@ -109,6 +109,10 @@ test_words <- train_model(testDataset) %>%
   group_by(w1) %>%
   top_n(3, trans_prob)
 
+test_unigrams <- test_words %>%
+  select(w1)
+
+test_words <- unique(test_unigrams)  
 
 
 
