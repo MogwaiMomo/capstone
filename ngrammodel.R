@@ -112,21 +112,22 @@ test_words <- train_model(testDataset) %>%
 test_unigrams <- test_words %>%
   select(w1)
 
-test_words <- unique(test_unigrams)  
+test_unigrams <- ungroup(unique(test_unigrams))  
 
+test_unigrams <- test_unigrams$w1
 
-
-# Get 
 test_model <- function(unigram, model) {
-  w <- as.character(unigram)
-  if (w %in% model$w1) {
-    next_w <- model %>%
-      filter(w == w1) %>%
-      select(w2, mean)
-    print(next_w)
-  }
-  else {
-    print("Word not found.")
+  for (i in 1:100) {
+    w <- unigram[[i]]
+    if (w %in% model$w1) {
+      next_w <- model %>%
+        filter(w == w1) %>%
+        select(w2, mean)
+      print(next_w)
+    }
+    else {
+      print("Word not found.")
+    }
   }
 }
 
