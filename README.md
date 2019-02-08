@@ -9,10 +9,10 @@ Next up: Write the test:
   - create 9 training sets - DONE
   - create 1 test set - DONE
   - get average trans probabilities from all 9 training sets - DONE
-  
-  - create n-grams for test set 
+  - create n-grams for test set  - DONE
   
   - test model with n-gram test set
+    - create list of unigrams
   
   
   - get % accuracy of test
