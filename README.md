@@ -18,6 +18,17 @@ Next up: Write the test:
     - reduce output of cycle to just top next word (as character) - DONE
     
     - calculate % coverage of test - DONE
+    
+    - NEXT: figure out how to speed up your model! Way too slow. Use tools in coursera tips: 
+    
+object.size(): this function reports the number of bytes that an R object occupies in memory
+
+Rprof(): this function runs the profiler in R that can be used to determine where bottlenecks in your function may exist. The profr package (available on CRAN) provides some additional tools for visualizing and summarizing profiling data.
+
+gc(): this function runs the garbage collector to retrieve unused RAM for R. In the process it tells you how much memory is currently being used by R.
+
+There will likely be a tradeoff that you have to make in between size and runtime. For example, an algorithm that requires a lot of memory, may run faster, while a slower algorithm may require less memory. You will have to find the right balance between the two in order to provide a good experience to the user.
+    
     - calculate % accuracy of test
 
 
@@ -74,6 +85,8 @@ https://www.tidytextmining.com/ngrams.html
 
 1. Build basic n-gram model - using the exploratory analysis you performed, build a basic n-gram model for predicting the next word based on the previous 1, 2, or 3 words.
 
+
+
 2. Build a model to handle unseen n-grams - in some cases people will want to type a combination of words that does not appear in the corpora. Build a model to handle cases where a particular n-gram isn't observed.
 
 #### Questions to consider
@@ -106,7 +119,4 @@ Tips, tricks, and hints
 
 Here are a few tools that may be of use to you as you work on their algorithm:
 
-object.size(): this function reports the number of bytes that an R object occupies in memory
-Rprof(): this function runs the profiler in R that can be used to determine where bottlenecks in your function may exist. The profr package (available on CRAN) provides some additional tools for visualizing and summarizing profiling data.
-gc(): this function runs the garbage collector to retrieve unused RAM for R. In the process it tells you how much memory is currently being used by R.
-There will likely be a tradeoff that you have to make in between size and runtime. For example, an algorithm that requires a lot of memory, may run faster, while a slower algorithm may require less memory. You will have to find the right balance between the two in order to provide a good experience to the user.
+
