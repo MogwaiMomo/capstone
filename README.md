@@ -17,7 +17,7 @@ Next up: Write the test:
     
     - reduce output of cycle to just top next word (as character) - DONE
     
-    - calculate % coverage of test
+    - calculate % coverage of test - DONE
     - calculate % accuracy of test
 
 

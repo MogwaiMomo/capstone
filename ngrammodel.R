@@ -117,7 +117,9 @@ test_unigrams <- ungroup(unique(test_unigrams))
 test_unigrams <- test_unigrams$w1
 
 test_model <- function(unigram, model) {
-  for (i in 1:100) {
+  hits <- 0
+  sample <- 100
+  for (i in 1:sample) {
     w <- unigram[[i]]
     if (w %in% model$w1) {
       next_w <- model %>%
@@ -126,16 +128,12 @@ test_model <- function(unigram, model) {
         arrange(desc(mean)) %>%
         select(w2) %>%
         slice(1)
-      print(i)
-      print(w)
-      print(as.character(next_w))
-    }
-    else {
-      print(i)
-      print(w)
-      print("Word not found.")
+    
+      hits <- hits + 1
     }
   }
+  coverage <- hits/sample
+  print(coverage)
 }
 
 test_model(test_unigrams, final_model)
