@@ -117,11 +117,12 @@ test_unigrams <- ungroup(unique(test_unigrams))
 test_unigrams <- test_unigrams$w1
 
 test_model <- function(unigram, model) {
-  for (i in 1:100) {
+  for (i in 1:10) {
     w <- unigram[[i]]
     if (w %in% model$w1) {
       next_w <- model %>%
-        filter(w == w1) %>%
+        filter(w == w1)
+      next_w <- ungroup(next_w) %>%
         select(w2, mean)
       print(next_w)
     }
@@ -131,6 +132,7 @@ test_model <- function(unigram, model) {
   }
 }
 
+test_model(test_unigrams, final_model)
 
 # Also look into: https://cran.r-project.org/web/packages/markovchain/markovchain.pdf
 
