@@ -15,7 +15,7 @@ Next up: Write the test:
     - create list of unigrams - DONE
     - cycle through unigrams and pull up table to next words - DONE
     
-    - reduce output of cycle to just top next word (as character)
+    - reduce output of cycle to just top next word (as character) - DONE
     
     - calculate % coverage of test
     - calculate % accuracy of test

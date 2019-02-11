@@ -117,16 +117,22 @@ test_unigrams <- ungroup(unique(test_unigrams))
 test_unigrams <- test_unigrams$w1
 
 test_model <- function(unigram, model) {
-  for (i in 1:10) {
+  for (i in 1:100) {
     w <- unigram[[i]]
     if (w %in% model$w1) {
       next_w <- model %>%
         filter(w == w1)
       next_w <- ungroup(next_w) %>%
-        select(w2, mean)
-      print(next_w)
+        arrange(desc(mean)) %>%
+        select(w2) %>%
+        slice(1)
+      print(i)
+      print(w)
+      print(as.character(next_w))
     }
     else {
+      print(i)
+      print(w)
       print("Word not found.")
     }
   }
