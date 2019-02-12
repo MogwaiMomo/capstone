@@ -21,6 +21,10 @@ Next up: Write the test:
     
     - NEXT: figure out how to speed up your model! Way too slow. Use tools in coursera tips: 
     
+work through this first:     
+https://bookdown.org/rdpeng/RProgDA/the-role-of-physical-memory.html
+    
+    
 object.size(): this function reports the number of bytes that an R object occupies in memory
 
 Rprof(): this function runs the profiler in R that can be used to determine where bottlenecks in your function may exist. The profr package (available on CRAN) provides some additional tools for visualizing and summarizing profiling data.
