@@ -10,7 +10,6 @@ Next up: Write the test:
   - create 1 test set - DONE
   - get average trans probabilities from all 9 training sets - DONE
   - create n-grams for test set  - DONE
-  
   - test model with n-gram test set
     - create list of unigrams - DONE
     - cycle through unigrams and pull up table to next words - DONE
