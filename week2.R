@@ -22,9 +22,16 @@ library(RDRPOSTagger)
 library(LaF)
 
 
+options <- list("clean", "1", "2", "3","4", "5", "6","7","8", "9", "10")
+
+program <- readline(prompt="What program would you like to run?\n")
+
+
+
 ### EXPLORATORY DATA ANALYSIS
 
 # Clean the data using tidy methods:
+
 
 source('cleantexttidy.R', echo=TRUE)
 
