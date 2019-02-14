@@ -1,3 +1,5 @@
+# Q6. Which words are common to all 3 sources?
+
 common_blog_news <- inner_join(blog.freq, news.freq, by = "word")
 common_news_twitter <- inner_join(news.freq, twitter.freq, by = "word")
 common_twitter_blog <- inner_join(twitter.freq, blog.freq, by = "word")
@@ -25,5 +27,26 @@ p8 <- ggplot(all.freq, aes(x = proportion, y = blog, color = blog- proportion)) 
   facet_wrap(~source, ncol = 2) +
   theme(legend.position="none") +
   labs(y = "blog", x = NULL)
+
+
+print(paste("The terms common to all sources are shown in the following table: "))
+
+common_full
+
+# Visualization of term similarity between sources:
+print(paste("Compare term similarity across sources via the following visualization: "))
+
+p8
+
+# Statistical tests of word frequency similarity between sources:
+
+
+# blog vs news
+cor.test(data = filter(all.freq, all.freq$source == "news"), ~ proportion + blog)
+print(paste("There is a significant level of correlation between news and blog content, about 50% correlation."))
+
+# blog vs twitter
+cor.test(data = filter(all.freq, all.freq$source == "twitter"), ~ proportion + blog)
+print(paste("There is a significant level of correlation between twitter and blog content, about 60% correlation."))
 
 

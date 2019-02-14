@@ -1,4 +1,5 @@
-
+# Q8. How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%?
+ 
 # get list of single unique words from all sources
 
 # blog + news
@@ -27,3 +28,6 @@ setCoverage <- function(df, cov) {
   }
   return(nrow(tmp))
 }
+
+setCoverage(all.freq, 0.5)
+setCoverage(all.freq, 0.9)

@@ -1,3 +1,5 @@
+# # Q9. How do you evaluate how many of the words come from foreign languages?
+
 # METHOD 1: Using Google's CLD3 package (language detection)
 
 library(cld3)
@@ -60,3 +62,4 @@ test.df <- create_multilang_df(100)
 # try it using lapply
 test.df$lang <- lapply(test.df$text, detect_language)
 
+# Q9. Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?

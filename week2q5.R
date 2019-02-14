@@ -1,3 +1,5 @@
+# Q5. Some words are more frequent than others - what are the distributions of word frequencies?
+
 # Generate word cloud: Blog
 # png("output/blog_wordcloud.png", width=1280,height=800)
 wordcloud(
