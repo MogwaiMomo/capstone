@@ -25,35 +25,38 @@ library(LaF)
 options <- list("0", "1", "2", "3","4", "5", "6","7","8", "9", "10")
 
 program <- readline(prompt="What program would you like to run?")
+program <- as.integer(program)
 
 if (program == 0) {
  source('cleantexttidy.R', echo=TRUE)
+} else if (program == 1) {
+  source('week2q1.R', echo=TRUE)
+} else if (program == 2) {
+  source('week2q2.R', echo=TRUE)
+} else if (program == 3) {
+  source('week2q3.R', echo=TRUE)
+} else if (program == 4) {
+  source('week2q4.R', echo=TRUE)
+} else if (program == 5) {
+  source('week2q5.R', echo=TRUE)
+} else if (program == 6) {
+  source('week2q6.R', echo=TRUE)
+} else if (program == 7) {
+  source('week2q7.R', echo=TRUE)
+} else if (program == 8) {
+  source('week2q8.R', echo=TRUE)
+} else if (program == 9) {
+  source('week2q9.R', echo=TRUE)
+} else if (program == 10) {
+  source('ngramnodel.R', echo=TRUE)
 } else {
   print("sorry, no match")
 }
 
-### EXPLORATORY DATA ANALYSIS
-
-# Clean the data using tidy methods:
 
 
 
-# ## SOURCE-LEVEL DATA ANALYSIS
-# 
-# # Q1. Which text source is, on average, the longest format? The shortest?
-# 
-# source('week2q1.R')
-# print(paste("The longest format is:", q1.max))
-# print(paste("The shortest format is:", q1.min))
-# 
-# 
-# # Q2. Are these document lengths normally distributed?
-# 
-# # show plots side by side
-# source('week2q2.R')
-# grid.arrange(p1, p2, p3, p4, p5, p6, ncol=2)
-# print(paste("None of the document lengths look normally distributed."))
-# 
+
 # # Q3. Are the different sources *significantly* different in length? 
 # source('week2q3.R')
 # p7

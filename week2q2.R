@@ -1,3 +1,6 @@
+# Q2. Are these document lengths normally distributed?
+
+
 # blog histogram  
 p1 <- ggplot(data = blog.docs, aes(char_count)) 
 p1 <- p1 + geom_histogram(bins = 50) + geom_vline(xintercept=mean(blog.docs$char_count), color="red")
@@ -27,3 +30,6 @@ p5 <- p5 + ggtitle("twitter document length: histogram") + xlab("char. length") 
 p6 <- ggplot(data = twitter.docs, aes(sample = char_count))
 p6 <- p6 + stat_qq() + stat_qq_line()
 p6 <- p6 + ggtitle("twitter document length: qq-plot")
+
+grid.arrange(p1, p2, p3, p4, p5, p6, ncol=2)
+print(paste("None of the document lengths look normally distributed."))
