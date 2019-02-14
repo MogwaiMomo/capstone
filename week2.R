@@ -22,18 +22,21 @@ library(RDRPOSTagger)
 library(LaF)
 
 
-options <- list("clean", "1", "2", "3","4", "5", "6","7","8", "9", "10")
+options <- list("0", "1", "2", "3","4", "5", "6","7","8", "9", "10")
 
-program <- readline(prompt="What program would you like to run?\n")
+program <- readline(prompt="What program would you like to run?")
 
-
+if (program == 0) {
+ source('cleantexttidy.R', echo=TRUE)
+} else {
+  print("sorry, no match")
+}
 
 ### EXPLORATORY DATA ANALYSIS
 
 # Clean the data using tidy methods:
 
 
-source('cleantexttidy.R', echo=TRUE)
 
 # ## SOURCE-LEVEL DATA ANALYSIS
 # 
@@ -138,7 +141,7 @@ source('cleantexttidy.R', echo=TRUE)
 # 
 # # Build basic n-gram model - using the exploratory analysis you performed, build a basic n-gram model for predicting the next word based on the previous 1, 2, or 3 words.
 
-source("ngrammodel.R", echo=TRUE)
+#source("ngrammodel.R", echo=TRUE)
 
 
 

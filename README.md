@@ -1,6 +1,6 @@
 # TO DO LIST - WEEK 2
 
-20190213: Create a basic n-gram model to predict the next word after 1, 2, or 3 words: 
+20190214: Create a basic n-gram model to predict the next word after 1, 2, or 3 words: 
 
 Next up: Write the test: 
 
@@ -15,13 +15,11 @@ Next up: Write the test:
     - cycle through unigrams and pull up table to next words - DONE
     
     - reduce output of cycle to just top next word (as character) - DONE
-    
     - calculate % coverage of test - DONE
     
-    - NEXT: figure out how to speed up your model! Way too slow. Use tools in coursera tips: 
-    
-work through this first:     
-https://bookdown.org/rdpeng/RProgDA/the-role-of-physical-memory.html
+    - NEXT: figure out how to speed up your model! Way too slow.
+      work through this first:     
+      https://bookdown.org/rdpeng/RProgDA/the-role-of-physical-memory.html
     
     
 object.size(): this function reports the number of bytes that an R object occupies in memory
