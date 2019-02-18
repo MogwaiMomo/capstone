@@ -75,6 +75,20 @@ raw.blog.df <- getData(files[1], random = T)
 raw.news.df <- getData(files[3], random = T)
 raw.twitter.df <- getData(files[5], random = T)
 
+
+raw.blog.df <- raw.blog.df %>%
+  mutate(char_count = nchar(text)) %>%
+  select(doc_id, text, char_count)
+
+raw.news.df <- raw.news.df %>%
+  mutate(char_count = nchar(text)) %>%
+  select(doc_id, text, char_count)
+
+raw.news.df <- raw.twitter.df %>%
+  mutate(char_count = nchar(text)) %>%
+  select(doc_id, text, char_count)
+
+
 raw.dfs <- list(
   blog = raw.blog.df,
   news = raw.news.df,
