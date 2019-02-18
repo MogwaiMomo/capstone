@@ -1,3 +1,5 @@
+start_time <- Sys.time()
+
 # get data from URL into list of files
 url <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
 
@@ -142,3 +144,6 @@ clean.news.df <- tidy.news %>%
 clean.twitter.df <- tidy.twitter %>%
   group_by(doc_id) %>%
   summarise(text = reduce_paste(word))
+
+end_time <- Sys.time()
+total_time <- end_time - start_time
