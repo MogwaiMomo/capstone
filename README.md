@@ -31,6 +31,8 @@ gc(): this function runs the garbage collector to retrieve unused RAM for R. In 
 There will likely be a tradeoff that you have to make in between size and runtime. For example, an algorithm that requires a lot of memory, may run faster, while a slower algorithm may require less memory. You will have to find the right balance between the two in order to provide a good experience to the user.
     
     - calculate % accuracy of test
+    - figure out how to account for foreign words
+
 
 
 Get some kind of markov chain prediction going ... 

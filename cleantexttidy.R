@@ -1,5 +1,3 @@
-start_time <- Sys.time()
-
 # get data from URL into list of files
 url <- "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
 
@@ -77,6 +75,12 @@ raw.blog.df <- getData(files[1], random = T)
 raw.news.df <- getData(files[3], random = T)
 raw.twitter.df <- getData(files[5], random = T)
 
+raw.dfs <- list(
+  blog = raw.blog.df,
+  news = raw.news.df,
+  twitter = raw.twitter.df
+)
+
 #################################
 
 
@@ -145,5 +149,27 @@ clean.twitter.df <- tidy.twitter %>%
   group_by(doc_id) %>%
   summarise(text = reduce_paste(word))
 
-end_time <- Sys.time()
-total_time <- end_time - start_time
+clean.dfs <- list(
+  blog = clean.blog.df,
+  news = clean.news.df,
+  twitter = clean.twitter.df
+)
+
+
+# write data to file 
+
+
+# raw texts from source
+for (i in 1:length(raw.dfs)) {
+  fwrite(raw.dfs[[i]],file=paste0("raw_", names(raw.dfs[i]),".csv"), quote = "auto")
+}
+
+# cleaned and lemmatized texts
+for (i in 1:length(clean.dfs)) {
+  fwrite(clean.dfs[[i]],file=paste0("clean_", names(clean.dfs[i]),".csv"), quote = "auto")
+}
+
+# remove objects after saving
+
+rm(list = ls())
+

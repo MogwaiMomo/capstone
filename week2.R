@@ -20,6 +20,8 @@ library(scales)
 library(wordnet)
 library(RDRPOSTagger)
 library(LaF)
+library(data.table)
+
 
 
 options <- list("0", "1", "2", "3","4", "5", "6","7","8", "9", "10")
@@ -27,31 +29,42 @@ options <- list("0", "1", "2", "3","4", "5", "6","7","8", "9", "10")
 program <- readline(prompt="What program would you like to run?")
 program <- as.integer(program)
 
-if (program == 0) {
- source('cleantexttidy.R', echo=TRUE)
-} else if (program == 1) {
-  source('week2q1.R', echo=TRUE)
-} else if (program == 2) {
-  source('week2q2.R', echo=TRUE)
-} else if (program == 3) {
-  source('week2q3.R', echo=TRUE)
-} else if (program == 4) {
-  source('week2q4.R', echo=TRUE)
-} else if (program == 5) {
-  source('week2q5.R', echo=TRUE)
-} else if (program == 6) {
-  source('week2q6.R', echo=TRUE)
-} else if (program == 7) {
-  source('week2q7.R', echo=TRUE)
-} else if (program == 8) {
-  source('week2q8.R', echo=TRUE)
-} else if (program == 9) {
-  source('week2q9.R', echo=TRUE)
-} else if (program == 10) {
-  source('ngramnodel.R', echo=TRUE)
-} else {
-  print("sorry, no match")
+run_program <- function(program) {
+  start_time <- Sys.time()
+  if (program == 0) {
+    source('cleantexttidy.R', echo=TRUE)
+    data
+  } else if (program == 1) {
+    source('week2q1.R', echo=TRUE)
+  } else if (program == 2) {
+    source('week2q2.R', echo=TRUE)
+  } else if (program == 3) {
+    source('week2q3.R', echo=TRUE)
+  } else if (program == 4) {
+    source('week2q4.R', echo=TRUE)
+  } else if (program == 5) {
+    source('week2q5.R', echo=TRUE)
+  } else if (program == 6) {
+    source('week2q6.R', echo=TRUE)
+  } else if (program == 7) {
+    source('week2q7.R', echo=TRUE)
+  } else if (program == 8) {
+    source('week2q8.R', echo=TRUE)
+  } else if (program == 9) {
+    source('week2q9.R', echo=TRUE)
+  } else if (program == 10) {
+    source('ngramnodel.R', echo=TRUE)
+  } else {
+    print("sorry, no match")
+  }
+  end_time <- Sys.time()
+  total_time <- end_time - start_time
+  print(total_time)
 }
+
+
+run_program(program)
+
 
 
 
